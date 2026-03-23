@@ -1,84 +1,53 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-namespace StudentJobPlatform.Data
+namespace StudentJobPlatform.Models
 {
-    public class FileRepository<T> : IRepository<T>
+    public class Job
     {
-        private readonly string _filePath;
-        private readonly List<T> _items;
+        private int _id;
+        private string _title;
+        private string _description;
+        private string _category;
+        private string _location;
+        private string _workingHours;
+        private decimal _salary;
+        private int _employerId;
+        private bool _isActive;
 
-        public FileRepository(string filePath)
+        public int Id => _id;
+        public string Title => _title;
+        public string Description => _description;
+        public string Category => _category;
+        public string Location => _location;
+        public string WorkingHours => _workingHours;
+        public decimal Salary => _salary;
+        public int EmployerId => _employerId;
+        public bool IsActive => _isActive;
+
+        public Job(int id, string title, string description, string category, string location, string workingHours, decimal salary, int employerId)
         {
-            _filePath = filePath;
-            _items = LoadFromFile();
+            _id = id;
+            _title = title;
+            _description = description;
+            _category = category;
+            _location = location;
+            _workingHours = workingHours;
+            _salary = salary;
+            _employerId = employerId;
+            _isActive = true;
         }
 
-        public List<T> GetAll()
+        public void Activate()
         {
-            return _items;
+            _isActive = true;
         }
 
-        public T? GetById(int id)
+        public void Deactivate()
         {
-            return _items.FirstOrDefault(item =>
-            {
-                var property = item!.GetType().GetProperty("Id");
-                if (property == null) return false;
-
-                int value = (int)property.GetValue(item)!;
-                return value == id;
-            });
+            _isActive = false;
         }
 
-        public void Add(T item)
+        public override string ToString()
         {
-            _items.Add(item);
-        }
-
-        public void Save()
-        {
-            var lines = _items.Select(item => item!.ToString()).ToList();
-            File.WriteAllLines(_filePath, lines);
-        }
-
-        private List<T> LoadFromFile()
-        {
-            var items = new List<T>();
-
-            if (!File.Exists(_filePath))
-                return items;
-
-            var lines = File.ReadAllLines(_filePath);
-
-            foreach (var line in lines)
-            {
-                if (string.IsNullOrWhiteSpace(line))
-                    continue;
-
-                if (typeof(T).Name == "Job")
-                {
-                    var parts = line.Split(',');
-
-                    var job = (T)Activator.CreateInstance(
-                        typeof(T),
-                        int.Parse(parts[0]),
-                        parts[1],
-                        parts[2],
-                        parts[3],
-                        parts[4],
-                        parts[5],
-                        decimal.Parse(parts[6]),
-                        int.Parse(parts[7])
-                    )!;
-
-                    items.Add(job);
-                }
-            }
-
-            return items;
+            return $"{_id},{_title},{_description},{_category},{_location},{_workingHours},{_salary},{_employerId}";
         }
     }
 }
