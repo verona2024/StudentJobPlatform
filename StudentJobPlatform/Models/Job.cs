@@ -44,5 +44,10 @@
         {
             _isActive = false;
         }
+
+        public override string ToString()
+        {
+            return $"{_id},{_title},{_description},{_category},{_location},{_workingHours},{_salary},{_employerId}";
+        }
     }
 }

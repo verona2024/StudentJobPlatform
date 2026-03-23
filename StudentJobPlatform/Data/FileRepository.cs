@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace StudentJobPlatform.Data
 {
     public class FileRepository<T> : IRepository<T>
     {
-        private List<T> _items;
+        private readonly string _filePath;
+        private readonly List<T> _items;
 
-        public FileRepository()
+        public FileRepository(string filePath)
         {
-            _items = new List<T>();
+            _filePath = filePath;
+            _items = LoadFromFile();
         }
 
         public List<T> GetAll()
@@ -36,8 +40,45 @@ namespace StudentJobPlatform.Data
 
         public void Save()
         {
-            // për këtë projekt, nuk ruajmë në file real
-            // mjafton struktura për detyrë
+            var lines = _items.Select(item => item!.ToString()).ToList();
+            File.WriteAllLines(_filePath, lines);
+        }
+
+        private List<T> LoadFromFile()
+        {
+            var items = new List<T>();
+
+            if (!File.Exists(_filePath))
+                return items;
+
+            var lines = File.ReadAllLines(_filePath);
+
+            foreach (var line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                if (typeof(T).Name == "Job")
+                {
+                    var parts = line.Split(',');
+
+                    var job = (T)Activator.CreateInstance(
+                        typeof(T),
+                        int.Parse(parts[0]),
+                        parts[1],
+                        parts[2],
+                        parts[3],
+                        parts[4],
+                        parts[5],
+                        decimal.Parse(parts[6]),
+                        int.Parse(parts[7])
+                    )!;
+
+                    items.Add(job);
+                }
+            }
+
+            return items;
         }
     }
 }
