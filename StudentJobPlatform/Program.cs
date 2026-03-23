@@ -1,53 +1,22 @@
-namespace StudentJobPlatform.Models
+using StudentJobPlatform.Data;
+using StudentJobPlatform.Models;
+using StudentJobPlatform.Services;
+using StudentJobPlatform.UI;
+
+var userRepo = new FileRepository<User>(@"..\..\..\Files\users.csv");
+var jobRepo = new FileRepository<Job>(@"..\..\..\Files\jobs.csv");
+var applicationRepo = new FileRepository<Application>(@"..\..\..\Files\applications.csv");
+
+if (!jobRepo.GetAll().Any())
 {
-    public class Job
-    {
-        private int _id;
-        private string _title;
-        private string _description;
-        private string _category;
-        private string _location;
-        private string _workingHours;
-        private decimal _salary;
-        private int _employerId;
-        private bool _isActive;
-
-        public int Id => _id;
-        public string Title => _title;
-        public string Description => _description;
-        public string Category => _category;
-        public string Location => _location;
-        public string WorkingHours => _workingHours;
-        public decimal Salary => _salary;
-        public int EmployerId => _employerId;
-        public bool IsActive => _isActive;
-
-        public Job(int id, string title, string description, string category, string location, string workingHours, decimal salary, int employerId)
-        {
-            _id = id;
-            _title = title;
-            _description = description;
-            _category = category;
-            _location = location;
-            _workingHours = workingHours;
-            _salary = salary;
-            _employerId = employerId;
-            _isActive = true;
-        }
-
-        public void Activate()
-        {
-            _isActive = true;
-        }
-
-        public void Deactivate()
-        {
-            _isActive = false;
-        }
-
-        public override string ToString()
-        {
-            return $"{_id},{_title},{_description},{_category},{_location},{_workingHours},{_salary},{_employerId}";
-        }
-    }
+    jobRepo.Add(new Job(1, "Frontend Intern", "Punë part-time për student", "IT", "Mitrovicë", "20 orë/javë", 250, 1));
+    jobRepo.Add(new Job(2, "Marketing Assistant", "Punë për studentë", "Marketing", "Prishtinë", "15 orë/javë", 200, 2));
+    jobRepo.Save();
 }
+
+var menu = new MenuManager(
+    new JobService(jobRepo),
+    new ApplicationService(applicationRepo, jobRepo)
+);
+
+menu.Start();
