@@ -57,4 +57,5 @@ Chosen to separate concerns and make the project easier to maintain and scale.
 Used to abstract data access and make the system flexible for future changes.
 
 ### Minimal Program.cs
-Program.cs is kept minimal to only initialize dependencies and start the application.
+Program.cs is kept minimal to only initialize dependencies and start the application. 
+  
