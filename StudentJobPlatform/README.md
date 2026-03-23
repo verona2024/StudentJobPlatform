@@ -1,4 +1,4 @@
-﻿# Student Job Platform
+# Student Job Platform
 
 ## Përshkrimi i Projektit
 Student Job Platform është një aplikacion i ndërtuar në C# (Console Application) që synon të menaxhojë dhe të lehtësojë procesin e gjetjes dhe aplikimit për punë part-time nga studentët. Ky sistem simulon një platformë reale ku studentët mund të eksplorojnë mundësi pune, ndërsa punëdhënësit publikojnë oferta dhe admini mbikëqyr funksionimin e sistemit.
@@ -135,3 +135,13 @@ Student Job Platform është një shembull i qartë i aplikimit të parimeve të
    - 1 → shfaq punët
    - 2 → apliko në punë
    - 0 → dil nga aplikacioni
+
+   ---
+
+## Parimet SOLID
+
+Ky projekt reflekton disa nga parimet kryesore të SOLID:
+
+- **SRP (Single Responsibility Principle):** çdo klasë dhe shtresë ka një përgjegjësi të qartë (Models, Services, Data, UI)
+- **OCP (Open/Closed Principle):** sistemi mund të zgjerohet me funksionalitete të reja pa ndryshuar strukturën ekzistuese
+- **DIP (Dependency Inversion Principle):** service-at varen nga abstraksioni `IRepository<T>` dhe jo nga implementimi konkret
