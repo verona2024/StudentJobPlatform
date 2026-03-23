@@ -59,3 +59,19 @@ Used to abstract data access and make the system flexible for future changes.
 ### Minimal Program.cs
 Program.cs is kept minimal to only initialize dependencies and start the application. 
   
+  ---
+
+## SOLID Principles Applied
+
+### 1. Single Responsibility Principle (SRP)
+Each class in the project has a clear and specific responsibility.
+- Models represent data
+- Services contain business logic
+- Data layer handles data access
+- UI layer manages user interaction
+
+### 2. Open/Closed Principle (OCP)
+The project is structured so that functionality can be extended without heavily modifying existing classes. For example, new services or new model types can be added without changing the entire architecture.
+
+### 3. Dependency Inversion Principle (DIP)
+Services depend on the abstraction `IRepository<T>` instead of depending directly on a concrete data implementation. This makes the design more flexible and easier to extend.
