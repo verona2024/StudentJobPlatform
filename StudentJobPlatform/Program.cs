@@ -1,4 +1,4 @@
-﻿using StudentJobPlatform.Data;
+using StudentJobPlatform.Data;
 using StudentJobPlatform.Models;
 using StudentJobPlatform.Services;
 using StudentJobPlatform.UI;
