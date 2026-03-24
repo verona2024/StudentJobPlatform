@@ -75,3 +75,4 @@ The project is structured so that functionality can be extended without heavily 
 
 ### 3. Dependency Inversion Principle (DIP)
 Services depend on the abstraction `IRepository<T>` instead of depending directly on a concrete data implementation. This makes the design more flexible and easier to extend.
+
