@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace StudentJobPlatform.Data
 {
@@ -36,6 +37,7 @@ namespace StudentJobPlatform.Data
         public void Add(T item)
         {
             _items.Add(item);
+            Save();
         }
 
         public void Save()
@@ -58,10 +60,32 @@ namespace StudentJobPlatform.Data
                 if (string.IsNullOrWhiteSpace(line))
                     continue;
 
-                if (typeof(T).Name == "Job")
-                {
-                    var parts = line.Split(',');
+                var parts = line.Split(',');
 
+                if (typeof(T).Name == "User")
+                {
+                    var user = (T)Activator.CreateInstance(
+                        typeof(T),
+                        int.Parse(parts[0]),
+                        parts[1],
+                        parts[2],
+                        parts[3],
+                        parts[4]
+                    )!;
+
+                    var fieldMajor = user.GetType().GetField("_major", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var fieldSkills = user.GetType().GetField("_skills", BindingFlags.NonPublic | BindingFlags.Instance);
+
+                    if (parts.Length > 5 && fieldMajor != null)
+                        fieldMajor.SetValue(user, parts[5]);
+
+                    if (parts.Length > 6 && fieldSkills != null)
+                        fieldSkills.SetValue(user, parts[6]);
+
+                    items.Add(user);
+                }
+                else if (typeof(T).Name == "Job")
+                {
                     var job = (T)Activator.CreateInstance(
                         typeof(T),
                         int.Parse(parts[0]),
@@ -75,6 +99,23 @@ namespace StudentJobPlatform.Data
                     )!;
 
                     items.Add(job);
+                }
+                else if (typeof(T).Name == "Application")
+                {
+                    var application = (T)Activator.CreateInstance(
+                        typeof(T),
+                        int.Parse(parts[0]),
+                        int.Parse(parts[1]),
+                        int.Parse(parts[2]),
+                        DateTime.Parse(parts[3])
+                    )!;
+
+                    var fieldStatus = application.GetType().GetField("_status", BindingFlags.NonPublic | BindingFlags.Instance);
+
+                    if (parts.Length > 4 && fieldStatus != null)
+                        fieldStatus.SetValue(application, parts[4]);
+
+                    items.Add(application);
                 }
             }
 
