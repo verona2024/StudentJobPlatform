@@ -1,26 +1,29 @@
-﻿using System;
+using System;
 using StudentJobPlatform.Services;
 
 namespace StudentJobPlatform.UI
 {
     public class MenuManager
     {
-        private readonly JobService _jobService;
-        private readonly ApplicationService _applicationService;
+        private readonly StudentMenu _studentMenu;
+        private readonly EmployerMenu _employerMenu;
+        private readonly AdminMenu _adminMenu;
 
         public MenuManager(JobService jobService, ApplicationService applicationService)
         {
-            _jobService = jobService;
-            _applicationService = applicationService;
+            _studentMenu = new StudentMenu(jobService, applicationService);
+            _employerMenu = new EmployerMenu(jobService, applicationService);
+            _adminMenu = new AdminMenu(jobService, applicationService);
         }
 
         public void Start()
         {
             while (true)
             {
-                Console.WriteLine("Student Job Platform");
-                Console.WriteLine("1. Shfaq punët");
-                Console.WriteLine("2. Apliko në punë");
+                Console.WriteLine("=== Student Job Platform ===");
+                Console.WriteLine("1. Student");
+                Console.WriteLine("2. Employer");
+                Console.WriteLine("3. Admin");
                 Console.WriteLine("0. Dil");
 
                 string? choice = Console.ReadLine();
@@ -28,13 +31,15 @@ namespace StudentJobPlatform.UI
                 switch (choice)
                 {
                     case "1":
-                        ShowJobs();
+                        _studentMenu.Start();
                         break;
                     case "2":
-                        ApplyToJob();
+                        _employerMenu.Start();
+                        break;
+                    case "3":
+                        _adminMenu.Start();
                         break;
                     case "0":
-                        Console.WriteLine("Dalje nga sistemi.");
                         return;
                     default:
                         Console.WriteLine("Zgjedhje e pavlefshme.");
@@ -43,25 +48,6 @@ namespace StudentJobPlatform.UI
 
                 Console.WriteLine();
             }
-        }
-
-        private void ShowJobs()
-        {
-            var jobs = _jobService.GetAllJobs();
-
-            foreach (var job in jobs)
-            {
-                Console.WriteLine($"{job.Id} - {job.Title} - {job.Location}");
-            }
-        }
-
-        private void ApplyToJob()
-        {
-            Console.Write("Shkruaj Job ID: ");
-            int jobId = int.Parse(Console.ReadLine()!);
-
-            _applicationService.ApplyToJob(1, 1, jobId);
-            Console.WriteLine("Aplikimi u ruajt.");
         }
     }
 }
