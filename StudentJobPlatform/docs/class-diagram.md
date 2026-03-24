@@ -72,4 +72,4 @@
 - JobService uses IRepository<Job>
 - ApplicationService uses IRepository<Application> and IRepository<Job>
 - AuthService uses IRepository<User>
-- FileRepository implements IRepository
+- FileRepository implements IRepository 
