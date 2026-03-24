@@ -1,4 +1,4 @@
-﻿namespace StudentJobPlatform.Models
+namespace StudentJobPlatform.Models
 {
     public class Application
     {
@@ -26,6 +26,11 @@
         public void UpdateStatus(string status)
         {
             _status = status;
+        }
+
+        public override string ToString()
+        {
+            return $"{_id},{_studentId},{_jobId},{_applicationDate},{_status}";
         }
     }
 }
