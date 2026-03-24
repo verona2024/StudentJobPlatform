@@ -1,28 +1,30 @@
-﻿namespace StudentJobPlatform.Models
+namespace StudentJobPlatform.Models
 {
     public class Student : User
     {
-        private string _fieldOfStudy;
+        private string _major;
         private string _skills;
-        private string _location;
 
-        public string FieldOfStudy => _fieldOfStudy;
+        public string Major => _major;
         public string Skills => _skills;
-        public string Location => _location;
 
-        public Student(int id, string name, string email, string password, string fieldOfStudy, string skills, string location)
-            : base(id, name, email, password, "Student")
+        public Student(int id, string name, string email, string password, string role,
+                       string major, string skills)
+            : base(id, name, email, password, role)
         {
-            _fieldOfStudy = fieldOfStudy;
+            _major = major;
             _skills = skills;
-            _location = location;
         }
 
-        public void UpdateProfile(string fieldOfStudy, string skills, string location)
+        public void UpdateProfile(string major, string skills)
         {
-            _fieldOfStudy = fieldOfStudy;
+            _major = major;
             _skills = skills;
-            _location = location;
+        }
+
+        public override string ToString()
+        {
+            return $"{Id},{Name},{Email},{Role},{_major},{_skills}";
         }
     }
 }
