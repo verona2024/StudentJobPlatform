@@ -1,4 +1,5 @@
-﻿using StudentJobPlatform.Data;
+using System.Linq;
+using StudentJobPlatform.Data;
 using StudentJobPlatform.Models;
 
 namespace StudentJobPlatform.Services
@@ -20,6 +21,22 @@ namespace StudentJobPlatform.Services
                 return user;
 
             return null;
+        }
+
+        public void Register(User user)
+        {
+            _userRepository.Add(user);
+            _userRepository.Save();
+        }
+
+        public int GetNextUserId()
+        {
+            var users = _userRepository.GetAll();
+
+            if (!users.Any())
+                return 1;
+
+            return users.Max(u => u.Id) + 1;
         }
     }
 }
