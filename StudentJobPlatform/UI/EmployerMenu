@@ -1,0 +1,116 @@
+using System;
+using StudentJobPlatform.Models;
+using StudentJobPlatform.Services;
+
+namespace StudentJobPlatform.UI
+{
+    public class EmployerMenu
+    {
+        private readonly JobService _jobService;
+        private readonly ApplicationService _applicationService;
+
+        public EmployerMenu(JobService jobService, ApplicationService applicationService)
+        {
+            _jobService = jobService;
+            _applicationService = applicationService;
+        }
+
+        public void Start()
+        {
+            while (true)
+            {
+                Console.WriteLine("=== Employer Menu ===");
+                Console.WriteLine("1. Shto punë");
+                Console.WriteLine("2. Shfaq të gjitha punët");
+                Console.WriteLine("3. Shfaq aplikimet");
+                Console.WriteLine("4. Ndrysho statusin e aplikimit");
+                Console.WriteLine("0. Kthehu");
+
+                string? choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        AddJob();
+                        break;
+                    case "2":
+                        ShowJobs();
+                        break;
+                    case "3":
+                        ShowApplications();
+                        break;
+                    case "4":
+                        ChangeApplicationStatus();
+                        break;
+                    case "0":
+                        return;
+                    default:
+                        Console.WriteLine("Zgjedhje e pavlefshme.");
+                        break;
+                }
+
+                Console.WriteLine();
+            }
+        }
+
+        private void AddJob()
+        {
+            Console.Write("Titulli: ");
+            string title = Console.ReadLine()!;
+
+            Console.Write("Përshkrimi: ");
+            string description = Console.ReadLine()!;
+
+            Console.Write("Kategoria: ");
+            string category = Console.ReadLine()!;
+
+            Console.Write("Lokacioni: ");
+            string location = Console.ReadLine()!;
+
+            Console.Write("Orari: ");
+            string workingHours = Console.ReadLine()!;
+
+            Console.Write("Paga: ");
+            decimal salary = decimal.Parse(Console.ReadLine()!);
+
+            int newId = _jobService.GetAllJobs().Count + 1;
+            var job = new Job(newId, title, description, category, location, workingHours, salary, 1);
+
+            _jobService.AddJob(job);
+
+            Console.WriteLine("Punë u shtua me sukses.");
+        }
+
+        private void ShowJobs()
+        {
+            var jobs = _jobService.GetAllJobs();
+
+            foreach (var job in jobs)
+            {
+                Console.WriteLine($"{job.Id} - {job.Title} - {job.Location} - {job.Salary}€");
+            }
+        }
+
+        private void ShowApplications()
+        {
+            var applications = _applicationService.GetAllApplications();
+
+            foreach (var application in applications)
+            {
+                Console.WriteLine($"{application.Id} - Student: {application.StudentId} - Job: {application.JobId} - Status: {application.Status}");
+            }
+        }
+
+        private void ChangeApplicationStatus()
+        {
+            Console.Write("Shkruaj Application ID: ");
+            int applicationId = int.Parse(Console.ReadLine()!);
+
+            Console.Write("Shkruaj statusin (Accepted / Rejected): ");
+            string status = Console.ReadLine()!;
+
+            _applicationService.UpdateApplicationStatus(applicationId, status);
+            Console.WriteLine("Statusi u përditësua.");
+        }
+    }
+}
