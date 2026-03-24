@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using StudentJobPlatform.Data;
 using StudentJobPlatform.Models;
 
@@ -33,6 +34,25 @@ namespace StudentJobPlatform.Services
 
             var application = new Application(applicationId, studentId, jobId, DateTime.Now);
             _applicationRepository.Add(application);
+            _applicationRepository.Save();
+        }
+
+        public Application? GetApplicationById(int id)
+        {
+            return _applicationRepository.GetById(id);
+        }
+
+        public void UpdateApplicationStatus(int applicationId, string status)
+        {
+            var application = _applicationRepository.GetById(applicationId);
+
+            if (application == null)
+            {
+                Console.WriteLine("Aplikimi nuk u gjet.");
+                return;
+            }
+
+            application.UpdateStatus(status);
             _applicationRepository.Save();
         }
     }
