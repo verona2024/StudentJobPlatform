@@ -1,4 +1,4 @@
-﻿namespace StudentJobPlatform.Models
+namespace StudentJobPlatform.Models
 {
     public class Employer : User
     {
