@@ -73,14 +73,20 @@ namespace StudentJobPlatform.Data
                         parts[4]
                     )!;
 
-                    var fieldMajor = user.GetType().GetField("_major", BindingFlags.NonPublic | BindingFlags.Instance);
-                    var fieldSkills = user.GetType().GetField("_skills", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var type = user.GetType();
+
+                    var fieldMajor = type.GetField("_major", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var fieldSkills = type.GetField("_skills", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var fieldAvailability = type.GetField("_availability", BindingFlags.NonPublic | BindingFlags.Instance);
 
                     if (parts.Length > 5 && fieldMajor != null)
                         fieldMajor.SetValue(user, parts[5]);
 
                     if (parts.Length > 6 && fieldSkills != null)
                         fieldSkills.SetValue(user, parts[6]);
+
+                    if (parts.Length > 7 && fieldAvailability != null)
+                        fieldAvailability.SetValue(user, parts[7]);
 
                     items.Add(user);
                 }
