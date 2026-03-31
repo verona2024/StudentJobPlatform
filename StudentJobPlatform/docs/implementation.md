@@ -137,4 +137,16 @@ The project is fully functional end-to-end.
 ## Output Screenshots
 
 ### Student
+Screenshot 2026-03-31 234212.png 
+Screenshot 2026-03-31 234234.png
+Screenshot 2026-03-31 234346.png
+
+### Employer
+Screenshot 2026-03-31 234608.png
+Screenshot 2026-03-31 234939.png
+Screenshot 2026-03-31 235055.png
+
+### Admin
+Screenshot 2026-03-31 235307.png
+Screenshot 2026-03-31 235330.png
 
