@@ -13,14 +13,12 @@ namespace StudentJobPlatform.Services
             _userRepository = userRepository;
         }
 
-        public User? Login(int id, string password)
+        public User? Login(string email, string password)
         {
-            var user = _userRepository.GetById(id);
+            var users = _userRepository.GetAll();
 
-            if (user != null && user.CheckPassword(password))
-                return user;
-
-            return null;
+            return users.FirstOrDefault(u =>
+                u.Email == email && u.CheckPassword(password));
         }
 
         public void Register(User user)
