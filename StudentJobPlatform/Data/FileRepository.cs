@@ -40,6 +40,37 @@ namespace StudentJobPlatform.Data
             Save();
         }
 
+        public void Update(T item)
+        {
+            var property = item!.GetType().GetProperty("Id");
+            if (property == null) return;
+
+            int id = (int)property.GetValue(item)!;
+
+            for (int i = 0; i < _items.Count; i++)
+            {
+                var currentProperty = _items[i]!.GetType().GetProperty("Id");
+                if (currentProperty == null) continue;
+
+                int currentId = (int)currentProperty.GetValue(_items[i])!;
+                if (currentId == id)
+                {
+                    _items[i] = item;
+                    Save();
+                    return;
+                }
+            }
+        }
+
+        public void Delete(int id)
+        {
+            var item = GetById(id);
+            if (item == null) return;
+
+            _items.Remove(item);
+            Save();
+        }
+
         public void Save()
         {
             var lines = _items.Select(item => item!.ToString()).ToList();
