@@ -134,6 +134,7 @@ The system successfully implements:
 
 The project is fully functional end-to-end.
 
-The following screenshots shows the working console application with job listing and functional menu.
+## Output Screenshots
 
-![Output](output.png)
+### Student
+
