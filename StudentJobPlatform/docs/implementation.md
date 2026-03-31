@@ -137,7 +137,7 @@ The project is fully functional end-to-end.
 ## Output Screenshots
 
 ### Student
-Screenshot 2026-03-31 234212.png 
+![Student](<Screenshot 2026-03-31 234212.png>)
 Screenshot 2026-03-31 234234.png
 Screenshot 2026-03-31 234346.png
 
