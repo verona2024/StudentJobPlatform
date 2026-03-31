@@ -73,17 +73,18 @@ namespace StudentJobPlatform.UI
             _authService.Register(user);
 
             Console.WriteLine("Llogaria u krijua me sukses.");
+            Console.WriteLine($"ID juaj është: {id}");
         }
 
         private void Login()
         {
-            Console.Write("User ID: ");
-            int id = int.Parse(Console.ReadLine()!);
+            Console.Write("Email: ");
+            string email = Console.ReadLine()!;
 
             Console.Write("Password: ");
             string password = Console.ReadLine()!;
 
-            var user = _authService.Login(id, password);
+            var user = _authService.Login(email, password);
 
             if (user == null)
             {
