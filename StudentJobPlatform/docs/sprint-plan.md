@@ -1,0 +1,174 @@
+# Sprint 2 Plan — Verona Ademaj
+Data: 1 Prill 2026
+
+## Gjendja Aktuale
+
+### Çka funksionon tani?
+- Projekti kompajlohet dhe ekzekutohet pa probleme.
+- Ekziston arkitekturë e ndarë në shtresa:
+  - Models (Application, Employer, Job, Student, User)
+  - Services (AuthService, JobService, ApplicationService, StudentProfileService)
+  - Data (IRepository, FileRepository, DataSeeder)
+  - UI (AuthMenu, StudentMenu, EmployerMenu, AdminMenu, MenuManager)
+- Repository Pattern është implementuar me CRUD të plotë:
+  - GetAll
+  - GetById
+  - Add
+  - Update
+  - Delete
+  - Save
+- Të dhënat ruhen në CSV:
+  - users.csv
+  - jobs.csv
+  - applications.csv
+- Sistemi ka 3 role:
+  - Student
+  - Employer
+  - Admin
+- Login funksionon me email dhe password.
+- Studenti mund:
+  - të shfaqë punët
+  - të kërkojë dhe filtrojë
+  - të aplikojë
+  - të shohë aplikimet
+  - të menaxhojë profilin (major, skills, availability)
+  - të marrë rekomandime
+- Employer mund:
+  - të shtojë, përditësojë, fshijë punë
+  - të shohë aplikime
+  - të ndryshojë statusin
+- Admin mund:
+  - të shohë users, jobs dhe applications
+- Dokumentimi ekziston:
+  - README.md
+  - architecture.md
+  - class-diagram.md
+  - implementation.md
+  - user-stories.md
+
+### Çka nuk funksionon?
+- Projekti përdor CSV dhe jo databazë reale.
+- Error handling nuk është i plotë në gjithë sistemin.
+- Input i gabuar mund të shkaktojë crash në disa raste.
+- Nuk ka unit tests.
+- Nuk ka validime të avancuara (email unik, etj).
+- Password ruhen pa hashing (jo secure).
+- Autorizimi sipas rolit nuk është 100% i kontrolluar.
+- Nuk ka logging të error-eve.
+- UI është vetëm console (jo user-friendly për përdorim real).
+
+### A kompajlohet dhe ekzekutohet programi?
+- Po
+
+---
+
+## Plani i Sprintit
+
+### Feature e Re (çka do të ndërtoj)
+
+Do të implementoj **Sorting System për Jobs**.
+
+Useri do të mund të zgjedhë:
+- sortim sipas titullit (A-Z)
+- sortim sipas pagës (nga më e vogla → më e madhja)
+- sortim sipas pagës (nga më e madhja → më e vogla)
+
+Implementimi:
+- UI: shtohet opsion në menu
+- Service: logjika në JobService
+- Repository: përdor GetAll()
+
+---
+
+### Error Handling (çka do të shtoj)
+
+1. Input i gabuar:
+- try-catch për int/decimal
+- mesazh: "Ju lutem shkruani numër valid"
+
+2. ID nuk ekziston:
+- kontroll para Update/Delete/Get
+- mesazh: "Itemi nuk u gjet"
+
+3. File mungon:
+- try-catch në FileRepository
+- mesazh: "File nuk u gjet, po krijoj file të ri"
+
+4. Null values:
+- kontroll për null në çdo metodë
+
+5. Exception handling global:
+- programi nuk crashon në asnjë rast
+
+---
+
+## Teste (çka do të testoj)
+
+Metodat:
+- AddJob
+- GetJobById
+- SearchJobs
+- Sorting feature
+
+Rastet:
+- valid input → sukses
+- invalid input → error
+- ekziston → gjendet
+- nuk ekziston → nuk gjendet
+- sorting → rend korrekt
+
+---
+
+## Hapat drejt Projektit Final
+
+### 1. Databazë reale
+- Migrim nga CSV në PostgreSQL
+- Tabela:
+  - Users
+  - Jobs
+  - Applications
+  - Profiles
+  - Categories 
+
+### 2. Siguria
+- Hashing i password 
+- Mos ruajtje plain text
+- Validim i login-it
+
+### 3. Validime të avancuara
+- Email unik
+- Email format valid
+- Password minimum length
+- Mos aplikim dy herë në të njëjtin job
+
+### 4. Autorizim real
+- Role-based access control
+- Student nuk fshin job
+- Employer nuk ndryshon job të tjetrit
+
+### 5. Matching inteligjent
+- përdor:
+  - major
+  - skills
+  - availability
+
+### 6. Logging
+- ruajtje e errore-ve në file
+
+### 7. UI më i avancuar
+- kalim në:
+  - ASP.NET Core (web app)
+  - ose desktop app
+
+### 8. Testim profesional
+- unit tests
+- integration tests
+
+### 9. Clean Code
+- SOLID principles
+- refactoring
+- strukturë më e pastër
+
+Ky sprint plan përshkruan përmirësimet që do të implementohen për ta bërë sistemin më të qëndrueshëm, më të sigut dhe më afër një aplikacioni real.
+---
+
