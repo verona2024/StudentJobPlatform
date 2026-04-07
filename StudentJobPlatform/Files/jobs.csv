@@ -1,9 +1,24 @@
-1,Frontend Intern,Punë part-time për student,IT,Mitrovicë,20 orë/javë,250,1
-2,Marketing Assistant,Punë për studentë,Marketing,Prishtinë,15 orë/javë,200,2
-3,Zhvillues Frontend Praktikant,Zhvillim i faqeve web me HTML CSS dhe JavaScript,IT,Prishtinë,20,300,1
-4,Asistent Marketingu,Menaxhim i rrjeteve sociale dhe marketing digjital,Marketing,Prishtinë,15,250,1
-5,Përfaqësues Shitjeje,Komunikim me klientë dhe prezantim i produkteve,Biznes,Mitrovicë,25,280,1
-6,Dizajner CAD Junior,Punë me AutoCAD për projekte të thjeshta,Arkitekturë,Prishtinë,20,320,1
-7,Mësues Privat i Matematikës,Mbajtje e orëve private për nxënës,Arsim,Gjilan,10,200,1
-8,Asistent në Farmaci,Ndihmë në organizimin e barnave dhe shërbim për klientë,Shëndetësi,Pejë,20,260,1
-9,Asistent Zyre,Menaxhim dokumentesh dhe punë administrative,Administratë,Ferizaj,30,300,1
+[
+  {
+    "Id": 1,
+    "Title": "Frontend Intern",
+    "Description": "Pun\u00EB part-time p\u00EBr student",
+    "Category": "IT",
+    "Location": "Mitrovic\u00EB",
+    "WorkingHours": "20 or\u00EB/jav\u00EB",
+    "Salary": 250,
+    "EmployerId": 1,
+    "IsActive": true
+  },
+  {
+    "Id": 2,
+    "Title": "Marketing Assistant",
+    "Description": "Pun\u00EB p\u00EBr student\u00EB",
+    "Category": "Marketing",
+    "Location": "Prishtin\u00EB",
+    "WorkingHours": "15 or\u00EB/jav\u00EB",
+    "Salary": 200,
+    "EmployerId": 2,
+    "IsActive": true
+  }
+]
