@@ -134,19 +134,6 @@ The system successfully implements:
 
 The project is fully functional end-to-end.
 
-## Output Screenshots
+The following screenshots shows the working console application with job listing and functional menu.
 
-### Student
-![Student](<Screenshot 2026-03-31 234212.png>)
-![Student](<Screenshot 2026-03-31 234234.png>)
-![Student](<Screenshot 2026-03-31 234346.png>)
-
-### Employer
-![Employer](<Screenshot 2026-03-31 234608.png>)
-![Employer](<Screenshot 2026-03-31 234939.png>)
-![Employer](<Screenshot 2026-03-31 235055.png>)
-
-### Admin
-![Admin](<Screenshot 2026-03-31 235307.png>)
-![Admin](<Screenshot 2026-03-31 235330.png>)
-
+![Output](output.png)
