@@ -1,0 +1,103 @@
+[
+  {
+    "Id": 1,
+    "Title": "Software Developer Intern",
+    "Company": "Gjirafa",
+    "Description": "Assist in developing web applications using .NET and work with senior developers.",
+    "Location": "Prishtinë",
+    "Category": "Internships",
+    "WorkingHours": "Part-Time",
+    "Salary": 300
+  },
+  {
+    "Id": 2,
+    "Title": "Frontend Developer Intern",
+    "Company": "Kutia",
+    "Description": "Build UI components using HTML, CSS and JavaScript.",
+    "Location": "Prizren",
+    "Category": "Internships",
+    "WorkingHours": "Part-Time",
+    "Salary": 280
+  },
+  {
+    "Id": 3,
+    "Title": "Graphic Design Intern",
+    "Company": "Viva Fresh",
+    "Description": "Create social media content and branding visuals.",
+    "Location": "Pejë",
+    "Category": "Internships",
+    "WorkingHours": "Part-Time",
+    "Salary": 250
+  },
+  {
+    "Id": 4,
+    "Title": "Marketing Intern",
+    "Company": "IPKO",
+    "Description": "Assist in digital marketing campaigns.",
+    "Location": "Gjilan",
+    "Category": "Internships",
+    "WorkingHours": "Part-Time",
+    "Salary": 260
+  },
+  {
+    "Id": 5,
+    "Title": "IT Support Intern",
+    "Company": "BKT",
+    "Description": "Help troubleshoot hardware and software issues.",
+    "Location": "Ferizaj",
+    "Category": "Internships",
+    "WorkingHours": "Part-Time",
+    "Salary": 290
+  },
+
+  {
+    "Id": 6,
+    "Title": "Call Center Agent",
+    "Company": "Teleperformance",
+    "Description": "Handle customer calls and provide support.",
+    "Location": "Prishtinë",
+    "Category": "Part-Time Jobs",
+    "WorkingHours": "Part-Time",
+    "Salary": 340
+  },
+  {
+    "Id": 7,
+    "Title": "Waiter / Waitress",
+    "Company": "Restaurant Liburnia",
+    "Description": "Serve customers and manage orders.",
+    "Location": "Prizren",
+    "Category": "Part-Time Jobs",
+    "WorkingHours": "Part-Time",
+    "Salary": 320
+  },
+  {
+    "Id": 8,
+    "Title": "Shop Assistant",
+    "Company": "Meridian Express",
+    "Description": "Assist customers and manage products.",
+    "Location": "Pejë",
+    "Category": "Part-Time Jobs",
+    "WorkingHours": "Part-Time",
+    "Salary": 300
+  },
+  {
+    "Id": 9,
+    "Title": "Receptionist",
+    "Company": "Hotel Sirius",
+    "Description": "Manage front desk and customer communication.",
+    "Location": "Gjilan",
+    "Category": "Part-Time Jobs",
+    "WorkingHours": "Part-Time",
+    "Salary": 360
+  },
+  {
+    "Id": 10,
+    "Title": "Sales Assistant",
+    "Company": "LC Waikiki",
+    "Description": "Work in retail assisting customers.",
+    "Location": "Prishtinë",
+    "Category": "Part-Time Jobs",
+    "WorkingHours": "Part-Time",
+    "Salary": 350
+  }
+]

@@ -1,0 +1,219 @@
+﻿@model List<StudentJobPlatform.Models.Application>
+
+@{
+    ViewData["Title"] = "Applications";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Applications</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #07111f, #0b1b33);
+            color: white;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-box {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+        }
+
+            .header-box h1 {
+                font-size: 34px;
+                margin-bottom: 8px;
+            }
+
+            .header-box p {
+                color: #cbd5e1;
+            }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+        }
+
+        .message {
+            padding: 14px 18px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .success {
+            background: rgba(34,197,94,0.15);
+            border: 1px solid rgba(34,197,94,0.35);
+            color: #bbf7d0;
+        }
+
+        .error {
+            background: rgba(239,68,68,0.15);
+            border: 1px solid rgba(239,68,68,0.35);
+            color: #fecaca;
+        }
+
+        .table-wrap {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: middle;
+        }
+
+        th {
+            color: #93c5fd;
+            font-size: 15px;
+        }
+
+        td {
+            color: #e2e8f0;
+        }
+
+        select {
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(255,255,255,0.06);
+            color: white;
+        }
+
+            select option {
+                color: black;
+            }
+
+        .btn-save {
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            cursor: pointer;
+        }
+
+        .empty-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 24px;
+            color: #cbd5e1;
+        }
+
+        form.inline-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/Auth/EmployerDashboard" class="back-btn">Back to Dashboard</a>
+
+        <div class="header-box">
+            <h1>Applications</h1>
+            <p>All applications for your posted jobs.</p>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="message success">@TempData["Success"]</div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="message error">@TempData["Error"]</div>
+        }
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <div class="empty-box">
+                No applications yet.
+            </div>
+        }
+        else
+        {
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Application ID</th>
+                            <th>Student ID</th>
+                            <th>Job ID</th>
+                            <th>Date Applied</th>
+                            <th>Status</th>
+                            <th>Change Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var application in Model)
+                        {
+                            <tr>
+                                <td>@application.Id</td>
+                                <td>@application.StudentId</td>
+                                <td>@application.JobId</td>
+                                <td>@application.ApplicationDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>@application.Status</td>
+                                <td>
+                                    <form method="post" action="/Employer/ChangeApplicationStatus" class="inline-form">
+                                        <input type="hidden" name="applicationId" value="@application.Id" />
+
+                                        <select name="status">
+                                            <option value="Pending" selected="@(application.Status == "Pending")">Pending</option>
+                                            <option value="Accepted" selected="@(application.Status == "Accepted")">Accepted</option>
+                                            <option value="Rejected" selected="@(application.Status == "Rejected")">Rejected</option>
+                                        </select>
+
+                                        <button type="submit" class="btn-save">Save</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</body>
+</html>

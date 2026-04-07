@@ -1,0 +1,359 @@
+﻿@model List<StudentJobPlatform.Models.Job>
+
+@{
+    ViewData["Title"] = "Recommended Jobs";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recommended Jobs - Student Job Platform</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #111827, #172554);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.3px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+            .nav-links a {
+                text-decoration: none;
+                color: white;
+                padding: 10px 18px;
+                border-radius: 12px;
+                font-weight: 600;
+                transition: 0.25s ease;
+            }
+
+                .nav-links a.secondary {
+                    background: rgba(255,255,255,0.08);
+                    border: 1px solid rgba(255,255,255,0.10);
+                }
+
+                    .nav-links a.secondary:hover {
+                        transform: translateY(-2px);
+                        background: rgba(255,255,255,0.12);
+                    }
+
+                .nav-links a.logout-btn {
+                    background: rgba(248,113,113,0.14);
+                    border: 1px solid rgba(248,113,113,0.25);
+                    color: #fecaca;
+                }
+
+                    .nav-links a.logout-btn:hover {
+                        transform: translateY(-2px);
+                        background: rgba(248,113,113,0.20);
+                    }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px 80px;
+        }
+
+        .header-box {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+        }
+
+            .header-box h1 {
+                font-size: 40px;
+                margin-bottom: 10px;
+                color: #ffffff;
+            }
+
+            .header-box p {
+                font-size: 17px;
+                color: #cbd5e1;
+                line-height: 1.7;
+            }
+
+        .form-box {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 35px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #dbeafe;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.08);
+            color: white;
+            outline: none;
+            font-size: 15px;
+            transition: 0.25s ease;
+        }
+
+            .form-group input::placeholder {
+                color: #94a3b8;
+            }
+
+            .form-group input:focus {
+                border-color: rgba(96,165,250,0.45);
+                box-shadow: 0 0 0 3px rgba(96,165,250,0.14);
+                background: rgba(255,255,255,0.10);
+            }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: 0.25s ease;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            color: white;
+            box-shadow: 0 10px 24px rgba(59,130,246,0.28);
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+            }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            color: white;
+        }
+
+            .btn-secondary:hover {
+                transform: translateY(-2px);
+                background: rgba(255,255,255,0.12);
+            }
+
+        .section-title {
+            font-size: 32px;
+            margin-bottom: 22px;
+            color: #f8fafc;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .job-card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 24px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+            transition: 0.25s ease;
+        }
+
+            .job-card:hover {
+                transform: translateY(-4px);
+                border-color: rgba(96,165,250,0.35);
+                box-shadow: 0 14px 32px rgba(59,130,246,0.12);
+            }
+
+            .job-card h3 {
+                margin-bottom: 14px;
+                color: #7dd3fc;
+                font-size: 24px;
+            }
+
+        .job-info {
+            margin-bottom: 10px;
+            color: #e2e8f0;
+            font-size: 16px;
+        }
+
+        .job-actions {
+            margin-top: 18px;
+        }
+
+        .empty-box {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 30px;
+            color: #cbd5e1;
+            line-height: 1.7;
+        }
+
+        .search-info {
+            margin-top: 18px;
+            color: #93c5fd;
+            font-size: 15px;
+        }
+
+        @@media (max-width: 900px) {
+            .form-grid,
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .header-box h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo">Student Job Platform</div>
+
+        <div class="nav-links">
+            <a href="/Auth/Dashboard" class="secondary">Back to Dashboard</a>
+            <a href="/Auth/Logout" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header-box">
+            <h1>Recommended Jobs</h1>
+            <p>Find jobs based on your major, skills, and availability.</p>
+        </div>
+
+        <div class="form-box">
+            <form method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Major</label>
+                        <input type="text" name="major" value="@ViewBag.Major" placeholder="e.g. Computer Science" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Skills</label>
+                        <input type="text" name="skills" value="@ViewBag.Skills" placeholder="e.g. C#, SQL, HTML" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Availability</label>
+                        <input type="text" name="availability" value="@ViewBag.Availability" placeholder="e.g. Part-Time" />
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Find Recommended Jobs</button>
+                    <a href="/Auth/Recommended" class="btn btn-secondary">Clear</a>
+                </div>
+            </form>
+
+            @if (ViewBag.Major != null || ViewBag.Skills != null || ViewBag.Availability != null)
+            {
+                <div class="search-info">
+                    Recommendation search completed based on your input.
+                </div>
+            }
+        </div>
+
+        <h2 class="section-title">Results</h2>
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <div class="empty-box">
+                No recommendations yet. Fill in the fields above to get the most relevant jobs.
+            </div>
+        }
+        else
+        {
+            <div class="jobs-grid">
+                @foreach (var job in Model)
+                {
+                    <div class="job-card">
+                        <h3>@job.Title</h3>
+                        <div class="job-info"><strong>Location:</strong> @job.Location</div>
+                        <div class="job-info"><strong>Salary:</strong> @job.Salary €</div>
+
+                        @if (!string.IsNullOrEmpty(job.Category))
+                        {
+                            <div class="job-info"><strong>Category:</strong> @job.Category</div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(job.WorkingHours))
+                        {
+                            <div class="job-info"><strong>Working Hours:</strong> @job.WorkingHours</div>
+                        }
+
+                        <div class="job-actions">
+                            <a href="/Application/Apply?jobId=@job.Id" class="btn btn-primary">Apply Now</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</body>
+</html>

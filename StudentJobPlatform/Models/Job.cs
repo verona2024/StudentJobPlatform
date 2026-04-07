@@ -2,52 +2,69 @@
 {
     public class Job
     {
-        private int _id;
-        private string _title;
-        private string _description;
-        private string _category;
-        private string _location;
-        private string _workingHours;
-        private decimal _salary;
-        private int _employerId;
-        private bool _isActive;
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Company { get; set; }
+        public string Description { get; set; }
+        public string Category { get; set; }
+        public string Location { get; set; }
+        public string WorkingHours { get; set; }
+        public decimal Salary { get; set; }
+        public int EmployerId { get; set; }
+        public bool IsActive { get; set; }
 
-        public int Id => _id;
-        public string Title => _title;
-        public string Description => _description;
-        public string Category => _category;
-        public string Location => _location;
-        public string WorkingHours => _workingHours;
-        public decimal Salary => _salary;
-        public int EmployerId => _employerId;
-        public bool IsActive => _isActive;
+        public Job()
+        {
+            Title = "";
+            Company = "";
+            Description = "";
+            Category = "";
+            Location = "";
+            WorkingHours = "";
+            IsActive = true;
+        }
 
         public Job(int id, string title, string description, string category, string location, string workingHours, decimal salary, int employerId)
         {
-            _id = id;
-            _title = title;
-            _description = description;
-            _category = category;
-            _location = location;
-            _workingHours = workingHours;
-            _salary = salary;
-            _employerId = employerId;
-            _isActive = true;
+            Id = id;
+            Title = title;
+            Company = "";
+            Description = description;
+            Category = category;
+            Location = location;
+            WorkingHours = workingHours;
+            Salary = salary;
+            EmployerId = employerId;
+            IsActive = true;
+        }
+
+        public Job(int id, string title, string company, string description, string category, string location, string workingHours, decimal salary, int employerId)
+        {
+            Id = id;
+            Title = title;
+            Company = company;
+            Description = description;
+            Category = category;
+            Location = location;
+            WorkingHours = workingHours;
+            Salary = salary;
+            EmployerId = employerId;
+            IsActive = true;
         }
 
         public void Activate()
         {
-            _isActive = true;
+            IsActive = true;
         }
 
         public void Deactivate()
         {
-            _isActive = false;
+            IsActive = false;
         }
 
         public override string ToString()
         {
-            return $"{_id},{_title},{_description},{_category},{_location},{_workingHours},{_salary},{_employerId}";
+            return $"{Id},{Title},{Description},{Category},{Location},{WorkingHours},{Salary},{EmployerId}";
         }
     }
 }

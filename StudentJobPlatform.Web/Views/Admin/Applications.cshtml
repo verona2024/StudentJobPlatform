@@ -1,0 +1,160 @@
+﻿@model List<StudentJobPlatform.Models.Application>
+
+@{
+    ViewData["Title"] = "Applications";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Applications</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #07111f, #0b1b33);
+            color: white;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 20px;
+        }
+
+            .header h1 {
+                margin-bottom: 8px;
+            }
+
+            .header p {
+                color: #cbd5e1;
+            }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+        }
+
+        .table-wrap {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 22px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        th {
+            color: #93c5fd;
+            font-size: 14px;
+        }
+
+        td {
+            color: #e2e8f0;
+        }
+
+        tr:hover {
+            background: rgba(255,255,255,0.04);
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .pending {
+            background: rgba(251,191,36,0.2);
+        }
+
+        .accepted {
+            background: rgba(34,197,94,0.2);
+        }
+
+        .rejected {
+            background: rgba(239,68,68,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <a href="/Admin/Dashboard" class="back-btn">⬅ Back to Dashboard</a>
+
+        <div class="header">
+            <h1>All Applications</h1>
+            <p>List of all applications in the system.</p>
+        </div>
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <p>No applications found.</p>
+        }
+        else
+        {
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Student ID</th>
+                            <th>Job ID</th>
+                            <th>Date Applied</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var application in Model)
+                        {
+                            <tr>
+                                <td>@application.Id</td>
+                                <td>@application.StudentId</td>
+                                <td>@application.JobId</td>
+                                <td>@application.ApplicationDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>
+                                    <span class="status
+                                                @(application.Status == "Pending" ? "pending" :
+                                                                                    application.Status == "Accepted" ? "accepted" : "rejected")">
+                                @application.Status
+                            </span>
+                        </td>
+                    </tr>
+                                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</body>
+</html>

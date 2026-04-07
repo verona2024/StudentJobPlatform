@@ -1,0 +1,191 @@
+﻿@model StudentJobPlatform.Models.User
+
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #07111f, #0b1b33);
+            color: white;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+        }
+
+        h1 {
+            font-size: 34px;
+            margin-bottom: 10px;
+            color: #f8fafc;
+        }
+
+        p {
+            color: #cbd5e1;
+            margin-bottom: 24px;
+        }
+
+        .success-box {
+            margin-bottom: 18px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: rgba(34,197,94,0.12);
+            border: 1px solid rgba(34,197,94,0.25);
+            color: #bbf7d0;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(255,255,255,0.06);
+            color: white;
+            outline: none;
+            font-size: 15px;
+        }
+
+            input::placeholder {
+                color: #94a3b8;
+            }
+
+        .hint {
+            margin-top: 6px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .btn {
+            text-decoration: none;
+            border: none;
+            padding: 13px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.10);
+            color: white;
+        }
+
+        .readonly-box {
+            margin-bottom: 20px;
+            padding: 16px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+            .readonly-box div {
+                margin-bottom: 8px;
+                color: #cbd5e1;
+            }
+
+            .readonly-box strong {
+                color: #f8fafc;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>My Profile</h1>
+            <p>Manage your academic and personal profile information.</p>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="success-box">@TempData["Success"]</div>
+            }
+
+            <div class="readonly-box">
+                <div><strong>Name:</strong> @Model.Name</div>
+                <div><strong>Email:</strong> @Model.Email</div>
+                <div><strong>Role:</strong> @Model.Role</div>
+            </div>
+
+            <form method="post" action="/Auth/Profile">
+                <div class="form-group">
+                    <label>Major</label>
+                    <input type="text" name="major" value="@Model.Major" placeholder="Example: Software Engineering" />
+                    <div class="hint">Example: Software Engineering</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Skills</label>
+                    <input type="text" name="skills" value="@Model.Skills" placeholder="Example: C#, ASP.NET Core, SQL" />
+                    <div class="hint">Example: C#, ASP.NET Core, SQL</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="location" value="@Model.Location" placeholder="Example: Prishtinë" />
+                    <div class="hint">Example: Prishtinë</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Availability</label>
+                    <input type="text" name="availability" value="@Model.Availability" placeholder="Example: Part-Time" />
+                    <div class="hint">Example: Part-Time / Full-Time / Flexible</div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Save Profile</button>
+                    <a href="/Auth/Dashboard" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

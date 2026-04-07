@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Application Submitted";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Application Submitted</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #07111f, #0b1b33);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 520px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.20);
+        }
+
+            .card h1 {
+                font-size: 34px;
+                margin-bottom: 14px;
+                color: #f8fafc;
+            }
+
+            .card p {
+                font-size: 18px;
+                color: #cbd5e1;
+                line-height: 1.7;
+                margin-bottom: 28px;
+            }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: 0.25s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.10);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Application Submitted</h1>
+        <p>Your application was sent successfully.</p>
+        <div class="actions">
+            <a href="/Auth/Dashboard" class="btn btn-primary">Back to Dashboard</a>
+            <a href="/" class="btn btn-secondary">Home Page</a>
+        </div>
+    </div>
+</body>
+</html>

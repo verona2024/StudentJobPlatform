@@ -1,0 +1,400 @@
+﻿@model List<StudentJobPlatform.Models.Job>
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #07111f, #0b1b33);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(7, 17, 31, 0.9);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+            .nav-links a {
+                text-decoration: none;
+                color: white;
+                padding: 10px 16px;
+                border-radius: 12px;
+                font-weight: 600;
+                background: rgba(255,255,255,0.06);
+                border: 1px solid rgba(255,255,255,0.10);
+                transition: 0.25s ease;
+            }
+
+                .nav-links a:hover {
+                    transform: translateY(-2px);
+                    background: rgba(255,255,255,0.10);
+                }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .welcome-box {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+        }
+
+            .welcome-box h1 {
+                font-size: 36px;
+                margin-bottom: 10px;
+                color: #f8fafc;
+            }
+
+            .welcome-box p {
+                font-size: 18px;
+                color: #cbd5e1;
+            }
+
+        .tools-box {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1.2fr auto;
+            gap: 14px;
+        }
+
+            .tools-grid input,
+            .tools-grid select {
+                width: 100%;
+                padding: 14px 16px;
+                border-radius: 14px;
+                border: 1px solid rgba(255,255,255,0.10);
+                background: rgba(255,255,255,0.06);
+                color: white;
+                font-size: 15px;
+                outline: none;
+            }
+
+                .tools-grid input::placeholder {
+                    color: #94a3b8;
+                }
+
+                .tools-grid select option {
+                    color: black;
+                }
+
+            .tools-grid button {
+                padding: 14px 20px;
+                border: none;
+                border-radius: 14px;
+                background: linear-gradient(135deg, #2563eb, #3b82f6);
+                color: white;
+                font-weight: 700;
+                cursor: pointer;
+                transition: 0.25s ease;
+            }
+
+                .tools-grid button:hover {
+                    transform: translateY(-2px);
+                }
+
+        .message {
+            padding: 14px 18px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .success {
+            background: rgba(34,197,94,0.15);
+            border: 1px solid rgba(34,197,94,0.35);
+            color: #bbf7d0;
+        }
+
+        .error {
+            background: rgba(239,68,68,0.15);
+            border: 1px solid rgba(239,68,68,0.35);
+            color: #fecaca;
+        }
+
+        .category-section {
+            margin-bottom: 45px;
+        }
+
+        .section-title {
+            font-size: 30px;
+            margin-bottom: 20px;
+            color: #f8fafc;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+        }
+
+        .job-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            transition: 0.25s ease;
+        }
+
+            .job-card:hover {
+                transform: translateY(-4px);
+                border-color: rgba(59,130,246,0.35);
+            }
+
+            .job-card h3 {
+                font-size: 24px;
+                color: #60a5fa;
+                margin-bottom: 10px;
+            }
+
+            .job-card p {
+                font-size: 16px;
+                color: #cbd5e1;
+                margin-bottom: 8px;
+                line-height: 1.5;
+            }
+
+        .btn-apply {
+            margin-top: 14px;
+            display: inline-block;
+            padding: 12px 18px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+            .btn-apply:hover {
+                transform: translateY(-2px);
+                color: white;
+            }
+
+        .empty-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 24px;
+            color: #cbd5e1;
+        }
+
+        @@media (max-width: 950px) {
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo">💼 Student Job Platform</div>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/Auth/Profile">My Profile</a>
+            <a href="/Auth/Recommended">Recommended Jobs</a>
+            <a href="/Auth/MyApplications">My Applications</a>
+            <a href="/Auth/Logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-box">
+            <h1>Welcome, @ViewBag.UserName 👋</h1>
+            <p>Search, sort, filter and apply to jobs.</p>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="message success">@TempData["Success"]</div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="message error">@TempData["Error"]</div>
+        }
+
+        <div class="tools-box">
+            <form method="get" action="/Auth/Dashboard" class="tools-grid">
+                <input type="text" name="search" placeholder="Search jobs..." value="@ViewBag.Search" />
+
+                <select name="category">
+                    <option value="">All Categories</option>
+                    <option value="Internships" selected="@(ViewBag.Category == "Internships")">Internships</option>
+                    <option value="Part-Time Jobs" selected="@(ViewBag.Category == "Part-Time Jobs")">Part-Time Jobs</option>
+                    <option value="Entry-Level" selected="@(ViewBag.Category == "Entry-Level")">Entry-Level</option>
+                    <option value="Remote Jobs" selected="@(ViewBag.Category == "Remote Jobs")">Remote Jobs</option>
+                </select>
+
+                <select name="sort">
+                    <option value="">Default Sorting</option>
+                    <option value="title" selected="@(ViewBag.Sort == "title")">Title A-Z</option>
+                    <option value="salaryAsc" selected="@(ViewBag.Sort == "salaryAsc")">Salary Low-High</option>
+                    <option value="salaryDesc" selected="@(ViewBag.Sort == "salaryDesc")">Salary High-Low</option>
+                </select>
+
+                <button type="submit">Apply</button>
+            </form>
+        </div>
+
+        @{
+            var internships = Model?.Where(x => x.Category == "Internships").ToList() ?? new List<StudentJobPlatform.Models.Job>();
+            var parttime = Model?.Where(x => x.Category == "Part-Time Jobs").ToList() ?? new List<StudentJobPlatform.Models.Job>();
+            var entry = Model?.Where(x => x.Category == "Entry-Level").ToList() ?? new List<StudentJobPlatform.Models.Job>();
+            var remote = Model?.Where(x => x.Category == "Remote Jobs").ToList() ?? new List<StudentJobPlatform.Models.Job>();
+        }
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <div class="empty-box">No jobs found.</div>
+        }
+        else
+        {
+            @if (internships.Any())
+            {
+                <div class="category-section">
+                    <h2 class="section-title">Internships</h2>
+                    <div class="jobs-grid">
+                        @foreach (var job in internships)
+                        {
+                            <div class="job-card">
+                                <h3>@job.Title</h3>
+                                <p><strong>Company:</strong> @job.Company</p>
+                                <p><strong>Location:</strong> @job.Location</p>
+                                <p><strong>Salary:</strong> @job.Salary €</p>
+                                <p><strong>Working Hours:</strong> @job.WorkingHours</p>
+                                <p>@job.Description</p>
+                                <a href="/Application/Apply?jobId=@job.Id" class="btn-apply">Apply Now</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (parttime.Any())
+            {
+                <div class="category-section">
+                    <h2 class="section-title">Part-Time Jobs</h2>
+                    <div class="jobs-grid">
+                        @foreach (var job in parttime)
+                        {
+                            <div class="job-card">
+                                <h3>@job.Title</h3>
+                                <p><strong>Company:</strong> @job.Company</p>
+                                <p><strong>Location:</strong> @job.Location</p>
+                                <p><strong>Salary:</strong> @job.Salary €</p>
+                                <p><strong>Working Hours:</strong> @job.WorkingHours</p>
+                                <p>@job.Description</p>
+                                <a href="/Application/Apply?jobId=@job.Id" class="btn-apply">Apply Now</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (entry.Any())
+            {
+                <div class="category-section">
+                    <h2 class="section-title">Entry-Level</h2>
+                    <div class="jobs-grid">
+                        @foreach (var job in entry)
+                        {
+                            <div class="job-card">
+                                <h3>@job.Title</h3>
+                                <p><strong>Company:</strong> @job.Company</p>
+                                <p><strong>Location:</strong> @job.Location</p>
+                                <p><strong>Salary:</strong> @job.Salary €</p>
+                                <p><strong>Working Hours:</strong> @job.WorkingHours</p>
+                                <p>@job.Description</p>
+                                <a href="/Application/Apply?jobId=@job.Id" class="btn-apply">Apply Now</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (remote.Any())
+            {
+                <div class="category-section">
+                    <h2 class="section-title">Remote Jobs</h2>
+                    <div class="jobs-grid">
+                        @foreach (var job in remote)
+                        {
+                            <div class="job-card">
+                                <h3>@job.Title</h3>
+                                <p><strong>Company:</strong> @job.Company</p>
+                                <p><strong>Location:</strong> @job.Location</p>
+                                <p><strong>Salary:</strong> @job.Salary €</p>
+                                <p><strong>Working Hours:</strong> @job.WorkingHours</p>
+                                <p>@job.Description</p>
+                                <a href="/Application/Apply?jobId=@job.Id" class="btn-apply">Apply Now</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</body>
+</html>

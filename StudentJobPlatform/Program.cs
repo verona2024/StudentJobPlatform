@@ -1,22 +1,21 @@
 ﻿using StudentJobPlatform.Data;
 using StudentJobPlatform.Models;
 using StudentJobPlatform.Services;
-using StudentJobPlatform.UI;
 
-var userRepo = new FileRepository<User>(@"..\..\..\Files\users.csv");
-var jobRepo = new FileRepository<Job>(@"..\..\..\Files\jobs.csv");
-var applicationRepo = new FileRepository<Application>(@"..\..\..\Files\applications.csv");
-
-if (!jobRepo.GetAll().Any())
+namespace StudentJobPlatform
 {
-    jobRepo.Add(new Job(1, "Frontend Intern", "Punë part-time për student", "IT", "Mitrovicë", "20 orë/javë", 250, 1));
-    jobRepo.Add(new Job(2, "Marketing Assistant", "Punë për studentë", "Marketing", "Prishtinë", "15 orë/javë", 200, 2));
-    jobRepo.Save();
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var jobRepository = new FileRepository<Job>("jobs.json");
+            var applicationRepository = new FileRepository<Application>("applications.json");
+
+            var jobService = new JobService(jobRepository);
+            var applicationService = new ApplicationService(applicationRepository, jobRepository);
+
+            var menuManager = new MenuManager(jobService, applicationService);
+            menuManager.Start();
+        }
+    }
 }
-
-var menu = new MenuManager(
-    new JobService(jobRepo),
-    new ApplicationService(applicationRepo, jobRepo)
-);
-
-menu.Start();

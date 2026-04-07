@@ -1,0 +1,164 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #07111f, #0b1b33);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(7, 17, 31, 0.9);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+            .nav-links a {
+                text-decoration: none;
+                color: white;
+                padding: 10px 16px;
+                border-radius: 12px;
+                font-weight: 600;
+                background: rgba(255,255,255,0.06);
+                border: 1px solid rgba(255,255,255,0.10);
+            }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .welcome-box {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+            .welcome-box h1 {
+                margin-bottom: 10px;
+            }
+
+            .welcome-box p {
+                color: #cbd5e1;
+            }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 28px;
+        }
+
+            .card h2 {
+                font-size: 34px;
+                color: #60a5fa;
+                margin-bottom: 10px;
+            }
+
+            .card p {
+                color: #cbd5e1;
+                margin-bottom: 16px;
+            }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+        }
+
+        @@media (max-width: 900px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo">🛠️ Admin Dashboard</div>
+
+        <div class="nav-links">
+            <a href="/Admin/Users">Users</a>
+            <a href="/Admin/Jobs">Jobs</a>
+            <a href="/Admin/Applications">Applications</a>
+            <a href="/Auth/Logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-box">
+            <h1>Welcome, @ViewBag.UserName 👋</h1>
+            <p>Manage the whole system from one place.</p>
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <h2>@ViewBag.UsersCount</h2>
+                <p>Total Users</p>
+                <a href="/Admin/Users" class="btn">View Users</a>
+            </div>
+
+            <div class="card">
+                <h2>@ViewBag.JobsCount</h2>
+                <p>Total Jobs</p>
+                <a href="/Admin/Jobs" class="btn">View Jobs</a>
+            </div>
+
+            <div class="card">
+                <h2>@ViewBag.ApplicationsCount</h2>
+                <p>Total Applications</p>
+                <a href="/Admin/Applications" class="btn">View Applications</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,2 +1,24 @@
-1,Frontend Intern,Punë part-time për student,IT,Mitrovicë,20 orë/javë,250,1
-2,Marketing Assistant,Punë për studentë,Marketing,Prishtinë,15 orë/javë,200,2
+[
+  {
+    "Id": 1,
+    "Title": "Frontend Intern",
+    "Description": "Pun\u00EB part-time p\u00EBr student",
+    "Category": "IT",
+    "Location": "Mitrovic\u00EB",
+    "WorkingHours": "20 or\u00EB/jav\u00EB",
+    "Salary": 250,
+    "EmployerId": 1,
+    "IsActive": true
+  },
+  {
+    "Id": 2,
+    "Title": "Marketing Assistant",
+    "Description": "Pun\u00EB p\u00EBr student\u00EB",
+    "Category": "Marketing",
+    "Location": "Prishtin\u00EB",
+    "WorkingHours": "15 or\u00EB/jav\u00EB",
+    "Salary": 200,
+    "EmployerId": 2,
+    "IsActive": true
+  }
+]

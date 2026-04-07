@@ -1,0 +1,481 @@
+﻿@{
+    ViewData["Title"] = "Student Job Platform";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Job Platform</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #07111f;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(7, 17, 31, 0.75);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 30px;
+            filter: drop-shadow(0 0 10px rgba(59,130,246,0.45));
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.3px;
+        }
+
+        .login-btn {
+            text-decoration: none;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 14px;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.35);
+            transition: 0.25s ease;
+        }
+
+            .login-btn:hover {
+                transform: translateY(-2px) scale(1.02);
+                color: white;
+            }
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 150px 20px 80px;
+            overflow: hidden;
+            background: radial-gradient(circle at top center, rgba(59,130,246,0.26), transparent 30%), radial-gradient(circle at 20% 70%, rgba(96,165,250,0.12), transparent 22%), radial-gradient(circle at 80% 30%, rgba(37,99,235,0.14), transparent 24%), linear-gradient(135deg, #07111f 0%, #0b1b33 45%, #07111f 100%);
+        }
+
+            .hero::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+                background-size: 55px 55px;
+                opacity: 0.18;
+                pointer-events: none;
+            }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 950px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            margin-bottom: 24px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: rgba(59,130,246,0.14);
+            border: 1px solid rgba(96,165,250,0.25);
+            color: #bfdbfe;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 0 30px rgba(59,130,246,0.10);
+        }
+
+        .hero-content h1 {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.15;
+            color: #f8fafc;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+            .hero-content h1 span {
+                color: #60a5fa;
+                text-shadow: 0 0 18px rgba(96,165,250,0.25);
+            }
+
+        .hero-subtitle {
+            max-width: 830px;
+            margin: 0 auto 18px;
+            font-size: 20px;
+            line-height: 1.75;
+            color: #dbeafe;
+        }
+
+        .hero-small-text {
+            font-size: 16px;
+            color: #cbd5e1;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            text-decoration: none;
+            padding: 15px 34px;
+            border-radius: 15px;
+            font-size: 17px;
+            font-weight: 700;
+            transition: 0.25s ease;
+            min-width: 180px;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.32);
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-3px);
+                color: white;
+            }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: white;
+        }
+
+            .btn-secondary:hover {
+                transform: translateY(-3px);
+                background: rgba(255,255,255,0.09);
+                color: white;
+            }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            color: #60a5fa;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #cbd5e1;
+            font-size: 15px;
+        }
+
+        .categories {
+            background: #081221;
+            padding: 70px 20px 90px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #f8fafc;
+        }
+
+        .section-subtitle {
+            max-width: 700px;
+            margin: 0 auto 34px;
+            color: #94a3b8;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .category-grid {
+            max-width: 1150px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+
+        .category-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 26px 20px;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+            transition: 0.25s ease;
+            text-decoration: none;
+            min-height: 170px;
+        }
+
+            .category-card:hover {
+                transform: translateY(-6px);
+                border-color: rgba(59,130,246,0.45);
+                box-shadow: 0 14px 34px rgba(37,99,235,0.18);
+                color: white;
+            }
+
+        .icon {
+            font-size: 34px;
+        }
+
+        .about {
+            background: linear-gradient(180deg, #0d1728 0%, #09111d 100%);
+            padding: 85px 20px;
+            text-align: center;
+        }
+
+            .about .container {
+                max-width: 920px;
+                margin: 0 auto;
+            }
+
+            .about h2 {
+                font-size: 40px;
+                margin-bottom: 18px;
+                color: #f8fafc;
+            }
+
+            .about p {
+                font-size: 18px;
+                line-height: 1.9;
+                color: #cbd5e1;
+                margin-bottom: 18px;
+            }
+
+        .footer {
+            text-align: center;
+            padding: 24px 16px;
+            color: #94a3b8;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            background: #07111f;
+            font-size: 14px;
+        }
+
+        @@media (max-width: 992px) {
+            .hero-content h1 {
+                font-size: 44px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @@media (max-width: 600px) {
+            .topbar {
+                padding: 16px 18px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .hero {
+                padding: 120px 16px 60px;
+            }
+
+            .hero-content h1 {
+                font-size: 32px;
+            }
+
+            .hero-subtitle {
+                font-size: 16px;
+            }
+
+            .hero-small-text {
+                font-size: 14px;
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+            }
+
+            .section-title,
+            .about h2 {
+                font-size: 30px;
+            }
+
+            .about p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="logo">
+            <span class="logo-icon">💼</span>
+            <span class="logo-text">Student Job Platform</span>
+        </div>
+
+        <a href="/Auth/Login" class="login-btn">Login</a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Modern student employment platform</div>
+
+            <h1>Find the <span>right opportunity</span> for your student journey</h1>
+
+            <p class="hero-subtitle">
+                Student Job Platform helps students discover internships, part-time jobs,
+                remote work, and entry-level opportunities in one clean and simple place.
+            </p>
+
+            <p class="hero-small-text">
+                Create your account, explore jobs, get recommendations, and apply with ease.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="/Auth/Register" class="btn-primary">Get Started</a>
+                <a href="#about" class="btn-secondary">Learn More</a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-number">4+</div>
+                    <div class="stat-label">Job categories available</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-number">Easy</div>
+                    <div class="stat-label">Quick registration and login</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-number">Smart</div>
+                    <div class="stat-label">Personalized job recommendations</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="categories" id="categories">
+        <h2 class="section-title">Popular Categories</h2>
+        <p class="section-subtitle">
+            Explore the most useful categories for students and discover opportunities
+            that match your interests, schedule, and career goals.
+        </p>
+
+        <div class="category-grid">
+            <a class="category-card" href="/Home/Category?category=Internships">
+                <span class="icon">💼</span>
+                <span>Internships</span>
+            </a>
+
+            <a class="category-card" href="/Home/Category?category=Part-Time Jobs">
+                <span class="icon">🕒</span>
+                <span>Part-Time Jobs</span>
+            </a>
+
+            <a class="category-card" href="/Home/Category?category=Entry-Level">
+                <span class="icon">📋</span>
+                <span>Entry-Level</span>
+            </a>
+
+            <a class="category-card" href="/Home/Category?category=Remote Jobs">
+                <span class="icon">💻</span>
+                <span>Remote Jobs</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <h2>About Student Job Platform</h2>
+
+            <p>
+                Student Job Platform is designed to help students find part-time jobs,
+                internships, and entry-level opportunities that match their skills,
+                field of study, and availability.
+            </p>
+
+            <p>
+                The platform allows students to register, log in, search for jobs,
+                filter listings, receive personalized recommendations, and apply
+                to the most suitable opportunities.
+            </p>
+
+            <p>
+                Our goal is to simplify the connection between students and employers
+                by providing a modern, efficient, and user-friendly experience.
+            </p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        © 2026 Student Job Platform. Built for students and employers.
+    </footer>
+</body>
+</html>

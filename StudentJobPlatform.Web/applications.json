@@ -1,0 +1,37 @@
+[
+  {
+    "Id": 1,
+    "StudentId": 1,
+    "JobId": 1,
+    "ApplicationDate": "2026-04-07T03:26:27.7693559+02:00",
+    "Status": "Pending"
+  },
+  {
+    "Id": 2,
+    "StudentId": 1,
+    "JobId": 3,
+    "ApplicationDate": "2026-04-07T03:43:48.8014699+02:00",
+    "Status": "Pending"
+  },
+  {
+    "Id": 3,
+    "StudentId": 1,
+    "JobId": 2,
+    "ApplicationDate": "2026-04-07T14:41:29.876271+02:00",
+    "Status": "Pending"
+  },
+  {
+    "Id": 4,
+    "StudentId": 1,
+    "JobId": 11,
+    "ApplicationDate": "2026-04-07T15:03:10.6992979+02:00",
+    "Status": "Pending"
+  },
+  {
+    "Id": 5,
+    "StudentId": 2,
+    "JobId": 1,
+    "ApplicationDate": "2026-04-07T17:45:58.7843554+02:00",
+    "Status": "Pending"
+  }
+]

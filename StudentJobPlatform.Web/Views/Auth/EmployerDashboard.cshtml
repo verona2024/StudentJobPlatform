@@ -1,0 +1,288 @@
+﻿@model List<StudentJobPlatform.Models.Job>
+
+@{
+    ViewData["Title"] = "Employer Dashboard";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employer Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #07111f, #0b1b33);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(7, 17, 31, 0.9);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+            .nav-links a {
+                text-decoration: none;
+                color: white;
+                padding: 10px 16px;
+                border-radius: 12px;
+                font-weight: 600;
+                background: rgba(255,255,255,0.06);
+                border: 1px solid rgba(255,255,255,0.10);
+                transition: 0.25s ease;
+            }
+
+                .nav-links a:hover {
+                    transform: translateY(-2px);
+                    background: rgba(255,255,255,0.10);
+                }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .welcome-box {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+        }
+
+            .welcome-box h1 {
+                font-size: 36px;
+                margin-bottom: 10px;
+                color: #f8fafc;
+            }
+
+            .welcome-box p {
+                font-size: 18px;
+                color: #cbd5e1;
+            }
+
+        .message {
+            padding: 14px 18px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .success {
+            background: rgba(34,197,94,0.15);
+            border: 1px solid rgba(34,197,94,0.35);
+            color: #bbf7d0;
+        }
+
+        .error {
+            background: rgba(239,68,68,0.15);
+            border: 1px solid rgba(239,68,68,0.35);
+            color: #fecaca;
+        }
+
+        .actions-box {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            text-decoration: none;
+            color: white;
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            transition: 0.25s ease;
+            display: inline-block;
+        }
+
+            .action-btn:hover {
+                transform: translateY(-2px);
+            }
+
+        .section-title {
+            font-size: 30px;
+            margin-bottom: 20px;
+            color: #f8fafc;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+        }
+
+        .job-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            transition: 0.25s ease;
+        }
+
+            .job-card:hover {
+                transform: translateY(-4px);
+                border-color: rgba(59,130,246,0.35);
+            }
+
+            .job-card h3 {
+                font-size: 24px;
+                color: #60a5fa;
+                margin-bottom: 10px;
+            }
+
+            .job-card p {
+                font-size: 16px;
+                color: #cbd5e1;
+                margin-bottom: 8px;
+                line-height: 1.5;
+            }
+
+        .card-actions {
+            margin-top: 16px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-edit {
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        }
+
+        .btn-delete {
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+        }
+
+        .empty-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 24px;
+            color: #cbd5e1;
+        }
+
+        @@media (max-width: 950px) {
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo">🏢 Employer Dashboard</div>
+
+        <div class="nav-links">
+            <a href="/Auth/Logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-box">
+            <h1>Welcome, @ViewBag.UserName 👋</h1>
+            <p>Manage your job postings and track your activity.</p>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="message success">@TempData["Success"]</div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="message error">@TempData["Error"]</div>
+        }
+
+        <div class="actions-box">
+            <a href="/Employer/AddJob" class="action-btn">Add New Job</a>
+            <a href="/Employer/Applications" class="action-btn">View Applications</a>
+        </div>
+
+        <h2 class="section-title">My Posted Jobs</h2>
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <div class="empty-box">
+                You have not posted any jobs yet.
+            </div>
+        }
+        else
+        {
+            <div class="jobs-grid">
+                @foreach (var job in Model)
+                {
+                    <div class="job-card">
+                        <h3>@job.Title</h3>
+                        <p><strong>Company:</strong> @job.Company</p>
+                        <p><strong>Category:</strong> @job.Category</p>
+                        <p><strong>Location:</strong> @job.Location</p>
+                        <p><strong>Salary:</strong> @job.Salary €</p>
+                        <p><strong>Working Hours:</strong> @job.WorkingHours</p>
+                        <p>@job.Description</p>
+
+                        <div class="card-actions">
+                            <a href="/Employer/EditJob?id=@job.Id" class="btn-edit">Edit</a>
+                            <a href="/Employer/DeleteJob?id=@job.Id" class="btn-delete">Delete</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</body>
+</html>

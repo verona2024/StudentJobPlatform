@@ -27,5 +27,10 @@
         {
             _status = status;
         }
+
+        public override string ToString()
+        {
+            return $"{_id},{_studentId},{_jobId},{_applicationDate},{_status}";
+        }
     }
 }
