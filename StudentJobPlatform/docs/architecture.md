@@ -57,6 +57,9 @@ Chosen to separate concerns and make the project easier to maintain and scale.
 Used to abstract data access and make the system flexible for future changes.
 
 ### Minimal Program.cs
+<<<<<<< Updated upstream
+Program.cs is kept minimal to only initialize dependencies and start the application.
+=======
 Program.cs is kept minimal to only initialize dependencies and start the application. 
   
 
@@ -74,3 +77,4 @@ The project is structured so that functionality can be extended without heavily 
 
 ### 3. Dependency Inversion Principle (DIP)
 Services depend on the abstraction `IRepository<T>` instead of depending directly on a concrete data implementation. This makes the design more flexible and easier to extend.
+>>>>>>> Stashed changes
