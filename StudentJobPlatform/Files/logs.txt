@@ -1,0 +1,1 @@
+[2026-04-06 12:15:11] ERROR: Login i dështuar - password gabim për email: verona.ademaj@gmail.com
