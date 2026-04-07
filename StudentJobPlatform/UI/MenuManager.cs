@@ -1,7 +1,8 @@
 using System;
 using StudentJobPlatform.Services;
+using StudentJobPlatform.UI;
 
-namespace StudentJobPlatform.UI
+namespace StudentJobPlatform
 {
     public class MenuManager
     {
