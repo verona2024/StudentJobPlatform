@@ -1,67 +1,79 @@
-﻿---
+# StudentJobPlatform
 
-## CRUD Operations (Job)
-
-The system implements full CRUD operations for the Job model:
-
-- Create → Add job
-- Read → View jobs / find by ID
-- Update → Edit job details
-- Delete → Remove job
-
-These operations are implemented through:
-- IRepository<T>
-- FileRepository<T>
-- JobService
-- EmployerMenu
+## Përshkrimi
+StudentJobPlatform është një aplikacion web i ndërtuar me ASP.NET Core që lejon studentët të kërkojnë dhe aplikojnë për punë, ndërsa employer-at mund të menaxhojnë job-et dhe aplikimet.
 
 ---
 
-## Validation
+## Funksionalitetet
 
-Validation is implemented in the service layer:
+### Student
+- Shikon listën e job-eve
+- Kërkon dhe filtron job-et
+- Aplikon për job
+- Shikon aplikimet e veta
+- Menaxhon profilin
 
-- Job title must not be empty
-- Description must not be empty
-- Category must not be empty
-- Location must not be empty
-- Working hours must not be empty
-- Salary must be greater than 0
+### Employer
+- Shton job-e
+- Editon dhe fshin job-e
+- Shikon aplikimet
+- Ndryshon statusin e aplikimeve
 
----
-
-## Implementation Details
-
-The system works end-to-end:
-
-User → UI → Service → Repository → CSV File
-
-Example:
-Employer adds a job → validated in JobService → saved in FileRepository → stored in jobs.csv → can be viewed, updated, or deleted later.
+### Admin
+- Shikon të gjithë user-at
+- Shikon job-et dhe aplikimet
 
 ---
 
-## Data Persistence
+## Arkitektura
 
-All data is stored in CSV files:
+Projekti është ndërtuar me arkitekturë:
 
-- Files/users.csv
-- Files/jobs.csv
-- Files/applications.csv
+UI → Service → Repository
 
-Data remains saved after closing and reopening the application.
+- UI (Web) – ndërfaqja për përdoruesin
+- Service – logjika e aplikacionit
+- Repository – menaxhimi i të dhënave
 
 ---
 
-## Final Status
+## Teknologjitë
 
-The system is fully functional and includes:
+- ASP.NET Core
+- C#
+- Repository Pattern
+- MSTest për unit testing
 
-- layered architecture
-- repository pattern
-- full CRUD operations
-- validation logic
-- role-based system
-- persistent storage
+---
 
-The project is complete and ready for evaluation.
+## Testimi
+
+Projekti përmban unit tests për:
+- Shtimin e job-eve
+- Filtrimin dhe sortimin
+- Aplikimin në job
+
+Të gjitha testet kalojnë me sukses.
+
+---
+
+## Error Handling
+
+- Përdoren try-catch në Service dhe Repository
+- Input validohet
+- Programi nuk crashon
+
+---
+
+## Si të ekzekutohet
+
+1. Hap projektin në Visual Studio
+2. Run `StudentJobPlatform.Web`
+3. Aplikacioni hapet në browser
+
+---
+
+## Autori
+
+Verona Ademaj
