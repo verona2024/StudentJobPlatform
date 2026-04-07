@@ -1,0 +1,9 @@
+[
+  {
+    "Id": 1,
+    "StudentId": 2,
+    "JobId": 1,
+    "ApplicationDate": "2026-04-07T01:06:44.138874+02:00",
+    "Status": "Pending"
+  }
+]
