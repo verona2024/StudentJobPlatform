@@ -1,10 +1,21 @@
-namespace StudentJobPlatform;
 using StudentJobPlatform.Data;
 using StudentJobPlatform.Models;
 using StudentJobPlatform.Services;
-using StudentJobPlatform.UI;
-public class Program
-{  public static void Main()
-    {   var userRepo = new FileRepository<User>(@"..\..\..\Files\users.csv"); var jobRepo = new FileRepository<Job>(@"..\..\..\Files\jobs.csv"); var appRepo = new FileRepository<Application>(@"..\..\..\Files\applications.csv");
-        AppServices.JobService = new JobService(jobRepo); AppServices.ApplicationService = new ApplicationService(appRepo, jobRepo); AppServices.AuthService = new AuthService(userRepo);
-        DataSeeder.SeedJobs(jobRepo); new AuthMenu(AppServices.AuthService).Start();}}
+
+namespace StudentJobPlatform
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var jobRepository = new FileRepository<Job>("jobs.json");
+            var applicationRepository = new FileRepository<Application>("applications.json");
+
+            var jobService = new JobService(jobRepository);
+            var applicationService = new ApplicationService(applicationRepository, jobRepository);
+
+            var menuManager = new MenuManager(jobService, applicationService);
+            menuManager.Start();
+        }
+    }
+}
