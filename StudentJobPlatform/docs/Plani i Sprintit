@@ -1,140 +1,114 @@
-Sprint 2 Plan — Verona Ademaj
-Data: 1 Prill 2026
+# Sprint 2 Report — Verona Ademaj
 
-Gjendja Aktuale
-Çka funksionon tani?
-Projekti kompajlohet dhe ekzekutohet pa probleme.
-Ekziston arkitekturë e ndarë në shtresa:
-Models (Application, Employer, Job, Student, User)
-Services (AuthService, JobService, ApplicationService, StudentProfileService)
-Data (IRepository, FileRepository, DataSeeder)
-UI (AuthMenu, StudentMenu, EmployerMenu, AdminMenu, MenuManager)
-Repository Pattern është implementuar me CRUD të plotë:
-GetAll
-GetById
-Add
-Update
-Delete
-Save
-Të dhënat ruhen në CSV:
-users.csv
-jobs.csv
-applications.csv
-Sistemi ka 3 role:
-Student
-Employer
-Admin
-Login funksionon me email dhe password.
-Studenti mund:
-të shfaqë punët
-të kërkojë dhe filtrojë
-të aplikojë
-të shohë aplikimet
-të menaxhojë profilin (major, skills, availability)
-të marrë rekomandime
-Employer mund:
-të shtojë, përditësojë, fshijë punë
-të shohë aplikime
-të ndryshojë statusin
-Admin mund:
-të shohë users, jobs dhe applications
-Dokumentimi ekziston:
-README.md
-architecture.md
-class-diagram.md
-implementation.md
-user-stories.md
-Çka nuk funksionon?
-Projekti përdor CSV dhe jo databazë reale.
-Error handling nuk është i plotë në gjithë sistemin.
-Input i gabuar mund të shkaktojë crash në disa raste.
-Nuk ka unit tests.
-Nuk ka validime të avancuara (email unik, etj).
-Password ruhen pa hashing (jo secure).
-Autorizimi sipas rolit nuk është 100% i kontrolluar.
-Nuk ka logging të error-eve.
-UI është vetëm console (jo user-friendly për përdorim real).
-A kompajlohet dhe ekzekutohet programi?
-Po
-Plani i Sprintit
-Feature e Re (çka do të ndërtoj)
-Do të implementoj Sorting System për Jobs.
+## Çka Përfundova
 
-Useri do të mund të zgjedhë:
+Gjatë këtij sprinti kam arritur të përfundoj dhe përmirësoj në mënyrë të konsiderueshme projektin tim duke implementuar funksionalitete të reja, duke refaktorizuar kodin dhe duke shtuar testim.
 
-sortim sipas titullit (A-Z)
-sortim sipas pagës (nga më e vogla → më e madhja)
-sortim sipas pagës (nga më e madhja → më e vogla)
-Implementimi:
+### Feature e Re
 
-UI: shtohet opsion në menu
-Service: logjika në JobService
-Repository: përdor GetAll()
-Error Handling (çka do të shtoj)
-Input i gabuar:
-try-catch për int/decimal
-mesazh: "Ju lutem shkruani numër valid"
-ID nuk ekziston:
-kontroll para Update/Delete/Get
-mesazh: "Itemi nuk u gjet"
-File mungon:
-try-catch në FileRepository
-mesazh: "File nuk u gjet, po krijoj file të ri"
-Null values:
-kontroll për null në çdo metodë
-Exception handling global:
-programi nuk crashon në asnjë rast
-Teste (çka do të testoj)
-Metodat:
+Kam implementuar sistemin e sortimit të job-eve (Sorting System), i cili i lejon përdoruesit të:
 
-AddJob
-GetJobById
-SearchJobs
-Sorting feature
-Rastet:
+- Sortojë job-et sipas titullit (A-Z)
+- Sortojë sipas pagës (nga më e vogla në më të madhen)
+- Sortojë sipas pagës (nga më e madhja në më të voglen)
 
-valid input → sukses
-invalid input → error
-ekziston → gjendet
-nuk ekziston → nuk gjendet
-sorting → rend korrekt
-Hapat drejt Projektit Final
-1. Databazë reale
-Migrim nga CSV në PostgreSQL
-Tabela:
-Users
-Jobs
-Applications
-Profiles
-Categories
-2. Siguria
-Hashing i password
-Mos ruajtje plain text
-Validim i login-it
-3. Validime të avancuara
-Email unik
-Email format valid
-Password minimum length
-Mos aplikim dy herë në të njëjtin job
-4. Autorizim real
-Role-based access control
-Student nuk fshin job
-Employer nuk ndryshon job të tjetrit
-5. Matching inteligjent
-përdor:
-major
-skills
-availability
-6. Logging
-ruajtje e errore-ve në file
-7. UI më i avancuar
-kalim në:
-ASP.NET Core (web app)
-ose desktop app
-8. Testim profesional
-unit tests
-integration tests
-9. Clean Code
-SOLID principles
-refactoring
-strukturë më e pastër
+Ky funksionalitet është implementuar duke respektuar arkitekturën:
+
+- UI → merr input nga përdoruesi
+- Service (JobService) → përmban logjikën e sortimit
+- Repository → përdoret vetëm për marrjen e të dhënave
+
+---
+
+### Përmirësime në Kod (Clean Code & Refactoring)
+
+- Kam ndarë logjikën në shtresa të qarta: UI → Service → Repository
+- Kam reduktuar përsëritjen e kodit
+- Kam përdorur metoda helper për validim dhe kontroll
+- Kam krijuar `Constants.cs` për role dhe status (Student, Employer, Admin)
+- Kam organizuar kodin në mënyrë më të lexueshme dhe të mirëmbajtshme
+
+---
+
+### Error Handling
+
+Kam implementuar trajtim të gabimeve në të gjitha pjesët kryesore të sistemit:
+
+- Kontroll për input të pavlefshëm (string bosh, ID <= 0, etj.)
+- try-catch në Service dhe Repository për të parandaluar crash
+- Mesazhe të qarta për userin në rast gabimi
+- Kontroll për raste si:
+  - aplikim i dyfishtë në të njëjtin job
+  - job që nuk ekziston
+  - input i gabuar nga useri
+
+Programi nuk crashon në asnjë rast dhe vazhdon ekzekutimin normal.
+
+---
+
+### Logging
+
+Kam implementuar një sistem logging për gabime:
+
+- `Logger.cs` ruan gabimet në file `logs.txt`
+- Çdo exception ruhet për debug dhe analizë
+- Kjo ndihmon në mirëmbajtjen dhe stabilitetin e sistemit
+
+---
+
+### Role-Based Access Control
+
+Kam implementuar kontroll të roleve:
+
+- Student → vetëm shikon dhe aplikon
+- Employer → menaxhon vetëm job-et e veta
+- Admin → ka akses në të gjitha të dhënat
+
+Përdoruesit nuk mund të aksesojnë funksionalitete që nuk u përkasin.
+
+---
+
+### Unit Testing
+
+Kam krijuar një projekt testimi dhe kam implementuar unit tests për funksionalitetet kryesore:
+
+- Test për shtimin e job-it
+- Test për sortimin sipas pagës
+- Test për filtrimin sipas lokacionit
+- Test për aplikimin në job
+- Test për kontrollin e aplikimit të dyfishtë
+
+Të gjitha testet kalojnë me sukses (Passed).
+
+---
+
+## ❗ Çka Nuk U Përfundua
+
+- Projekti aktualisht përdor CSV për ruajtjen e të dhënave dhe jo databazë reale
+- Nuk është implementuar ende PostgreSQL ose një databazë tjetër.
+
+Këto janë planifikuar si përmirësime për fazat e ardhshme të projektit.
+
+---
+
+## 🔜 Planet për Vazhdim
+
+Në vazhdim planifikoj:
+
+- Migrimin nga CSV në databazë reale (PostgreSQL)
+- Implementimin e hashing për password (siguri më e lartë)
+- Validime më të avancuara (email unik, format valid, etj.)
+- Përmirësim të UI (kalim në ASP.NET Core web app)
+- Shtim të integration tests
+
+---
+
+## 📚 Çka Mësova
+
+Gjatë këtij sprinti kam mësuar:
+
+- Si të organizoj një projekt me arkitekturë të ndarë në shtresa
+- Rëndësinë e clean code dhe refactoring
+- Si të implementoj error handling për stabilitet
+- Si të krijoj dhe ekzekutoj unit tests në .NET
+- Si të strukturoj një projekt për mirëmbajtje dhe zgjerim në të ardhmen.
