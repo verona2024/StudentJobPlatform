@@ -12,502 +12,324 @@ namespace StudentJobPlatform.Services
 
         public JobService(IRepository<Job> jobRepository)
         {
-            _jobRepository = jobRepository;
+            _jobRepository = jobRepository ?? throw new ArgumentNullException(nameof(jobRepository));
         }
 
         public List<Job> GetAllJobs()
         {
-            return _jobRepository.GetAll();
+            try
+            {
+                return _jobRepository.GetAll() ?? new List<Job>();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return new List<Job>();
+            }
         }
 
         public Job? GetJobById(int id)
         {
-            return _jobRepository.GetById(id);
+            try
+            {
+                if (id <= 0)
+                    return null;
+
+                return _jobRepository.GetById(id);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return null;
+            }
         }
 
-        public void AddJob(Job job)
+        public int GetNextJobId()
+        {
+            try
+            {
+                var jobs = GetAllJobs();
+                return jobs.Any() ? jobs.Max(j => j.Id) + 1 : 1;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return 1;
+            }
+        }
+
+        public bool AddJob(Job job)
+        {
+            try
+            {
+                if (job == null || !IsValidJob(job))
+                    return false;
+
+                _jobRepository.Add(job);
+                _jobRepository.Save();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return false;
+            }
+        }
+
+        public bool UpdateJob(Job job)
+        {
+            try
+            {
+                if (job == null || !IsValidJob(job))
+                    return false;
+
+                var existingJob = _jobRepository.GetById(job.Id);
+
+                if (existingJob == null)
+                    return false;
+
+                _jobRepository.Update(job);
+                _jobRepository.Save();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return false;
+            }
+        }
+
+        public bool DeleteJob(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                    return false;
+
+                var existingJob = _jobRepository.GetById(id);
+
+                if (existingJob == null)
+                    return false;
+
+                _jobRepository.Delete(id);
+                _jobRepository.Save();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return false;
+            }
+        }
+
+        public List<Job> GetJobsByEmployer(int employerId)
+        {
+            try
+            {
+                if (employerId <= 0)
+                    return new List<Job>();
+
+                return GetAllJobs()
+                    .Where(j => j.EmployerId == employerId)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return new List<Job>();
+            }
+        }
+
+        public List<Job> SearchJobs(string keyword)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(keyword))
+                    return GetAllJobs();
+
+                keyword = keyword.Trim().ToLower();
+
+                return GetAllJobs()
+                    .Where(j =>
+                        (!string.IsNullOrWhiteSpace(j.Title) && j.Title.ToLower().Contains(keyword)) ||
+                        (!string.IsNullOrWhiteSpace(j.Company) && j.Company.ToLower().Contains(keyword)) ||
+                        (!string.IsNullOrWhiteSpace(j.Description) && j.Description.ToLower().Contains(keyword)) ||
+                        (!string.IsNullOrWhiteSpace(j.Category) && j.Category.ToLower().Contains(keyword)) ||
+                        (!string.IsNullOrWhiteSpace(j.Location) && j.Location.ToLower().Contains(keyword)))
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return new List<Job>();
+            }
+        }
+
+        public List<Job> GetRecommendedJobs(string major, string skills, string availability)
+        {
+            try
+            {
+                var jobs = GetAllJobs();
+
+                if (string.IsNullOrWhiteSpace(major) &&
+                    string.IsNullOrWhiteSpace(skills) &&
+                    string.IsNullOrWhiteSpace(availability))
+                {
+                    return jobs;
+                }
+
+                string majorLower = (major ?? "").Trim().ToLower();
+                string skillsLower = (skills ?? "").Trim().ToLower();
+                string availabilityLower = (availability ?? "").Trim().ToLower();
+
+                return jobs.Where(j =>
+                        (!string.IsNullOrWhiteSpace(j.Description) && (
+                            (!string.IsNullOrWhiteSpace(majorLower) && j.Description.ToLower().Contains(majorLower)) ||
+                            (!string.IsNullOrWhiteSpace(skillsLower) && j.Description.ToLower().Contains(skillsLower)) ||
+                            (!string.IsNullOrWhiteSpace(availabilityLower) && j.Description.ToLower().Contains(availabilityLower))
+                        )) ||
+                        (!string.IsNullOrWhiteSpace(j.Title) && (
+                            (!string.IsNullOrWhiteSpace(majorLower) && j.Title.ToLower().Contains(majorLower)) ||
+                            (!string.IsNullOrWhiteSpace(skillsLower) && j.Title.ToLower().Contains(skillsLower))
+                        )) ||
+                        (!string.IsNullOrWhiteSpace(j.Category) && (
+                            (!string.IsNullOrWhiteSpace(availabilityLower) && j.Category.ToLower().Contains(availabilityLower))
+                        )))
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return new List<Job>();
+            }
+        }
+
+        public List<Job> SortByTitle()
+        {
+            try
+            {
+                return GetAllJobs()
+                    .OrderBy(j => j.Title)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return new List<Job>();
+            }
+        }
+
+        public List<Job> SortBySalaryAsc()
+        {
+            try
+            {
+                return GetAllJobs()
+                    .OrderBy(j => j.Salary)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return new List<Job>();
+            }
+        }
+
+        public List<Job> SortBySalaryDesc()
+        {
+            try
+            {
+                return GetAllJobs()
+                    .OrderByDescending(j => j.Salary)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return new List<Job>();
+            }
+        }
+
+        public List<Job> SortBySalaryAscending()
+        {
+            return SortBySalaryAsc();
+        }
+
+        public List<Job> SortBySalaryDescending()
+        {
+            return SortBySalaryDesc();
+        }
+
+        public List<Job> FilterJobsByLocation(string location)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(location))
+                    return GetAllJobs();
+
+                location = location.Trim().ToLower();
+
+                return GetAllJobs()
+                    .Where(j =>
+                        !string.IsNullOrWhiteSpace(j.Location) &&
+                        j.Location.ToLower().Contains(location))
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return new List<Job>();
+            }
+        }
+
+        public List<Job> FilterJobsByCategory(string category)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(category))
+                    return GetAllJobs();
+
+                category = category.Trim().ToLower();
+
+                return GetAllJobs()
+                    .Where(j =>
+                        !string.IsNullOrWhiteSpace(j.Category) &&
+                        j.Category.ToLower().Contains(category))
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+                return new List<Job>();
+            }
+        }
+
+        private bool IsValidJob(Job job)
         {
             if (string.IsNullOrWhiteSpace(job.Title))
-            {
-                Console.WriteLine("Titulli nuk mund të jetë bosh.");
-                return;
-            }
+                return false;
+
+            if (string.IsNullOrWhiteSpace(job.Company))
+                return false;
 
             if (string.IsNullOrWhiteSpace(job.Description))
-            {
-                Console.WriteLine("Përshkrimi nuk mund të jetë bosh.");
-                return;
-            }
+                return false;
 
             if (string.IsNullOrWhiteSpace(job.Category))
-            {
-                Console.WriteLine("Kategoria nuk mund të jetë bosh.");
-                return;
-            }
+                return false;
 
             if (string.IsNullOrWhiteSpace(job.Location))
-            {
-                Console.WriteLine("Lokacioni nuk mund të jetë bosh.");
-                return;
-            }
+                return false;
 
             if (string.IsNullOrWhiteSpace(job.WorkingHours))
-            {
-                Console.WriteLine("Orari i punës nuk mund të jetë bosh.");
-                return;
-            }
+                return false;
 
             if (job.Salary <= 0)
-            {
-                Console.WriteLine("Paga duhet të jetë më e madhe se 0.");
-                return;
-            }
+                return false;
 
-            _jobRepository.Add(job);
-            _jobRepository.Save();
-            Console.WriteLine("Puna u shtua me sukses.");
-        }
+            if (job.EmployerId <= 0)
+                return false;
 
-        public void UpdateJob(int id, string title, string description, string category, string location, string workingHours, decimal salary, int employerId)
-        {
-            var existingJob = _jobRepository.GetById(id);
-
-            if (existingJob == null)
-            {
-                Console.WriteLine("Puna nuk u gjet.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                Console.WriteLine("Titulli nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(description))
-            {
-                Console.WriteLine("Përshkrimi nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(category))
-            {
-                Console.WriteLine("Kategoria nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(location))
-            {
-                Console.WriteLine("Lokacioni nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(workingHours))
-            {
-                Console.WriteLine("Orari i punës nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (salary <= 0)
-            {
-                Console.WriteLine("Paga duhet të jetë më e madhe se 0.");
-                return;
-            }
-
-            var updatedJob = new Job(id, title, description, category, location, workingHours, salary, employerId);
-
-            if (!existingJob.IsActive)
-            {
-                updatedJob.Deactivate();
-            }
-
-            _jobRepository.Update(updatedJob);
-            Console.WriteLine("Puna u përditësua me sukses.");
-        }
-
-        public void DeleteJob(int id)
-        {
-            var existingJob = _jobRepository.GetById(id);
-
-            if (existingJob == null)
-            {
-                Console.WriteLine("Puna nuk u gjet.");
-                return;
-            }
-
-            _jobRepository.Delete(id);
-            Console.WriteLine("Puna u fshi me sukses.");
-        }
-
-        public List<Job> SearchJobs(string keyword)
-        {
-            return _jobRepository.GetAll()
-                .Where(j =>
-                    j.Title.ToLower().Contains(keyword.ToLower()) ||
-                    j.Description.ToLower().Contains(keyword.ToLower()) ||
-                    j.Category.ToLower().Contains(keyword.ToLower()) ||
-                    j.Location.ToLower().Contains(keyword.ToLower()))
-                .ToList();
-        }
-
-        public List<Job> FilterJobsByLocation(string location)
-        {
-            return _jobRepository.GetAll()
-                .Where(j => j.Location.ToLower() == location.ToLower())
-                .ToList();
-        }
-
-        public List<Job> FilterJobsByCategory(string category)
-        {
-            return _jobRepository.GetAll()
-                .Where(j => j.Category.ToLower() == category.ToLower())
-                .ToList();
-        }
-
-        public List<Job> GetRecommendedJobs(string major, string skills)
-        {
-            return _jobRepository.GetAll()
-                .Where(j =>
-                    j.Category.ToLower().Contains(major.ToLower()) ||
-                    skills.ToLower().Split(',').Any(skill =>
-                        j.Title.ToLower().Contains(skill.Trim().ToLower()) ||
-                        j.Description.ToLower().Contains(skill.Trim().ToLower()) ||
-                        j.Category.ToLower().Contains(skill.Trim().ToLower())
-                    )
-                )
-                .ToList();
-        }
-
-        public List<Job> SortByTitle()
-        {
-            return _jobRepository.GetAll()
-                .OrderBy(j => j.Title)
-                .ToList();
-        }
-
-        public int GetNextJobId()
-        {
-            var jobs = _jobRepository.GetAll();
-
-            if (!jobs.Any())
-                return 1;
-
-            return jobs.Max(j => j.Id) + 1;
-        }
-    }
-}            {
-                Console.WriteLine("Përshkrimi nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(job.Category))
-            {
-                Console.WriteLine("Kategoria nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(job.Location))
-            {
-                Console.WriteLine("Lokacioni nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(job.WorkingHours))
-            {
-                Console.WriteLine("Orari i punës nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (job.Salary <= 0)
-            {
-                Console.WriteLine("Paga duhet të jetë më e madhe se 0.");
-                return;
-            }
-
-            _jobRepository.Add(job);
-            _jobRepository.Save();
-            Console.WriteLine("Puna u shtua me sukses.");
-        }
-
-        public void UpdateJob(int id, string title, string description, string category, string location, string workingHours, decimal salary, int employerId)
-        {
-            var existingJob = _jobRepository.GetById(id);
-
-            if (existingJob == null)
-            {
-                Console.WriteLine("Puna nuk u gjet.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                Console.WriteLine("Titulli nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(description))
-            {
-                Console.WriteLine("Përshkrimi nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(category))
-            {
-                Console.WriteLine("Kategoria nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(location))
-            {
-                Console.WriteLine("Lokacioni nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(workingHours))
-            {
-                Console.WriteLine("Orari i punës nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (salary <= 0)
-            {
-                Console.WriteLine("Paga duhet të jetë më e madhe se 0.");
-                return;
-            }
-
-            var updatedJob = new Job(id, title, description, category, location, workingHours, salary, employerId);
-
-            if (!existingJob.IsActive)
-            {
-                updatedJob.Deactivate();
-            }
-
-            _jobRepository.Update(updatedJob);
-            Console.WriteLine("Puna u përditësua me sukses.");
-        }
-
-        public void DeleteJob(int id)
-        {
-            var existingJob = _jobRepository.GetById(id);
-
-            if (existingJob == null)
-            {
-                Console.WriteLine("Puna nuk u gjet.");
-                return;
-            }
-
-            _jobRepository.Delete(id);
-            Console.WriteLine("Puna u fshi me sukses.");
-        }
-
-        public List<Job> SearchJobs(string keyword)
-        {
-            return _jobRepository.GetAll()
-                .Where(j =>
-                    j.Title.ToLower().Contains(keyword.ToLower()) ||
-                    j.Description.ToLower().Contains(keyword.ToLower()) ||
-                    j.Category.ToLower().Contains(keyword.ToLower()) ||
-                    j.Location.ToLower().Contains(keyword.ToLower()))
-                .ToList();
-        }
-
-        public List<Job> FilterJobsByLocation(string location)
-        {
-            return _jobRepository.GetAll()
-                .Where(j => j.Location.ToLower() == location.ToLower())
-                .ToList();
-        }
-
-        public List<Job> FilterJobsByCategory(string category)
-        {
-            return _jobRepository.GetAll()
-                .Where(j => j.Category.ToLower() == category.ToLower())
-                .ToList();
-        }
-
-        public List<Job> GetRecommendedJobs(string major, string skills)
-        {
-            return _jobRepository.GetAll()
-                .Where(j =>
-                    j.Category.ToLower().Contains(major.ToLower()) ||
-                    skills.ToLower().Split(',').Any(skill =>
-                        j.Title.ToLower().Contains(skill.Trim().ToLower()) ||
-                        j.Description.ToLower().Contains(skill.Trim().ToLower()) ||
-                        j.Category.ToLower().Contains(skill.Trim().ToLower())
-                    )
-                )
-                .ToList();
-        }
-
-        public List<Job> SortByTitle()
-        {
-            return _jobRepository.GetAll()
-                .OrderBy(j => j.Title)
-                .ToList();
-        }
-
-        public int GetNextJobId()
-        {
-            var jobs = _jobRepository.GetAll();
-
-            if (!jobs.Any())
-                return 1;
-
-            return jobs.Max(j => j.Id) + 1;
-        }
-    }
-}            {
-                Console.WriteLine("Përshkrimi nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(job.Category))
-            {
-                Console.WriteLine("Kategoria nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(job.Location))
-            {
-                Console.WriteLine("Lokacioni nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(job.WorkingHours))
-            {
-                Console.WriteLine("Orari i punës nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (job.Salary <= 0)
-            {
-                Console.WriteLine("Paga duhet të jetë më e madhe se 0.");
-                return;
-            }
-
-            _jobRepository.Add(job);
-            _jobRepository.Save();
-            Console.WriteLine("Puna u shtua me sukses.");
-        }
-
-        public void UpdateJob(int id, string title, string description, string category, string location, string workingHours, decimal salary, int employerId)
-        {
-            var existingJob = _jobRepository.GetById(id);
-
-            if (existingJob == null)
-            {
-                Console.WriteLine("Puna nuk u gjet.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                Console.WriteLine("Titulli nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(description))
-            {
-                Console.WriteLine("Përshkrimi nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(category))
-            {
-                Console.WriteLine("Kategoria nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(location))
-            {
-                Console.WriteLine("Lokacioni nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(workingHours))
-            {
-                Console.WriteLine("Orari i punës nuk mund të jetë bosh.");
-                return;
-            }
-
-            if (salary <= 0)
-            {
-                Console.WriteLine("Paga duhet të jetë më e madhe se 0.");
-                return;
-            }
-
-            var updatedJob = new Job(id, title, description, category, location, workingHours, salary, employerId);
-
-            if (!existingJob.IsActive)
-            {
-                updatedJob.Deactivate();
-            }
-
-            _jobRepository.Update(updatedJob);
-            Console.WriteLine("Puna u përditësua me sukses.");
-        }
-
-        public void DeleteJob(int id)
-        {
-            var existingJob = _jobRepository.GetById(id);
-
-            if (existingJob == null)
-            {
-                Console.WriteLine("Puna nuk u gjet.");
-                return;
-            }
-
-            _jobRepository.Delete(id);
-            Console.WriteLine("Puna u fshi me sukses.");
-        }
-
-        public List<Job> SearchJobs(string keyword)
-        {
-            return _jobRepository.GetAll()
-                .Where(j =>
-                    j.Title.ToLower().Contains(keyword.ToLower()) ||
-                    j.Description.ToLower().Contains(keyword.ToLower()) ||
-                    j.Category.ToLower().Contains(keyword.ToLower()) ||
-                    j.Location.ToLower().Contains(keyword.ToLower()))
-                .ToList();
-        }
-
-        public List<Job> FilterJobsByLocation(string location)
-        {
-            return _jobRepository.GetAll()
-                .Where(j => j.Location.ToLower() == location.ToLower())
-                .ToList();
-        }
-
-        public List<Job> FilterJobsByCategory(string category)
-        {
-            return _jobRepository.GetAll()
-                .Where(j => j.Category.ToLower() == category.ToLower())
-                .ToList();
-        }
-
-        public List<Job> GetRecommendedJobs(string major, string skills)
-        {
-            return _jobRepository.GetAll()
-                .Where(j =>
-                    j.Category.ToLower().Contains(major.ToLower()) ||
-                    skills.ToLower().Split(',').Any(skill =>
-                        j.Title.ToLower().Contains(skill.Trim().ToLower()) ||
-                        j.Description.ToLower().Contains(skill.Trim().ToLower()) ||
-                        j.Category.ToLower().Contains(skill.Trim().ToLower())
-                    )
-                )
-                .ToList();
-        }
-
-        public int GetNextJobId()
-        {
-            var jobs = _jobRepository.GetAll();
-
-            if (!jobs.Any())
-                return 1;
-
-            return jobs.Max(j => j.Id) + 1;
+            return true;
         }
     }
 }
