@@ -1,4 +1,3 @@
-using System;
 using StudentJobPlatform.Models;
 using StudentJobPlatform.Services;
 
@@ -8,15 +7,13 @@ namespace StudentJobPlatform.UI
     {
         private readonly JobService _jobService;
         private readonly ApplicationService _applicationService;
-        private readonly StudentProfileService _profileService;
+        private readonly AuthService? _authService;
 
-        public StudentMenu(JobService jobService, ApplicationService applicationService)
+        public StudentMenu(JobService jobService, ApplicationService applicationService, AuthService? authService = null)
         {
             _jobService = jobService;
             _applicationService = applicationService;
-            _profileService = new StudentProfileService(
-                new StudentJobPlatform.Data.FileRepository<User>(@"..\..\..\Files\users.csv")
-            );
+            _authService = authService;
         }
 
         public void Start()
@@ -25,13 +22,15 @@ namespace StudentJobPlatform.UI
             {
                 Console.WriteLine("=== Student Menu ===");
                 Console.WriteLine("1. Shfaq të gjitha punët");
-                Console.WriteLine("2. Apliko në punë");
-                Console.WriteLine("3. My Applications");
-                Console.WriteLine("4. Search Jobs");
-                Console.WriteLine("5. Filter Jobs");
-                Console.WriteLine("6. Create/Update Profile");
-                Console.WriteLine("7. View Profile");
-                Console.WriteLine("8. Recommended Jobs");
+                Console.WriteLine("2. Kërko punë");
+                Console.WriteLine("3. Filtro sipas lokacionit");
+                Console.WriteLine("4. Filtro sipas kategorisë");
+                Console.WriteLine("5. Apliko në punë");
+                Console.WriteLine("6. Shfaq punët e rekomanduara");
+                Console.WriteLine("7. Përditëso profilin");
+                Console.WriteLine("8. Sort by Title (A-Z)");
+                Console.WriteLine("9. Sort by Salary (Low to High)");
+                Console.WriteLine("10. Sort by Salary (High to Low)");
                 Console.WriteLine("0. Kthehu");
 
                 string? choice = Console.ReadLine();
@@ -39,33 +38,50 @@ namespace StudentJobPlatform.UI
                 switch (choice)
                 {
                     case "1":
-                        ShowJobs();
+                        ShowJobs(_jobService.GetAllJobs());
                         break;
+
                     case "2":
-                        ApplyToJob();
-                        break;
-                    case "3":
-                        ShowMyApplications();
-                        break;
-                    case "4":
                         SearchJobs();
                         break;
+
+                    case "3":
+                        FilterByLocation();
+                        break;
+
+                    case "4":
+                        FilterByCategory();
+                        break;
+
                     case "5":
-                        FilterJobs();
+                        ApplyToJob();
                         break;
+
                     case "6":
-                        CreateProfile();
-                        break;
-                    case "7":
-                        ViewProfile();
-                        break;
-                    case "8":
                         ShowRecommendedJobs();
                         break;
+
+                    case "7":
+                        UpdateProfile();
+                        break;
+
+                    case "8":
+                        ShowJobs(_jobService.SortByTitle());
+                        break;
+
+                    case "9":
+                        ShowJobs(_jobService.SortBySalaryAsc());
+                        break;
+
+                    case "10":
+                        ShowJobs(_jobService.SortBySalaryDesc());
+                        break;
+
                     case "0":
                         return;
+
                     default:
-                        Console.WriteLine("Gabim.");
+                        Console.WriteLine("Zgjedhje e pavlefshme.");
                         break;
                 }
 
@@ -73,157 +89,111 @@ namespace StudentJobPlatform.UI
             }
         }
 
-        private void ShowJobs()
+        private void ShowJobs(List<Job> jobs)
         {
-            foreach (var job in _jobService.GetAllJobs())
+            if (jobs == null || jobs.Count == 0)
+            {
+                Console.WriteLine("Nuk ka punë.");
+                return;
+            }
+
+            foreach (var job in jobs)
             {
                 Console.WriteLine($"{job.Id} - {job.Title} - {job.Location} - {job.Salary}€");
             }
         }
 
-        private void ApplyToJob()
-        {
-            Console.Write("Job ID: ");
-            int jobId = int.Parse(Console.ReadLine()!);
-
-            int newId = _applicationService.GetAllApplications().Count + 1;
-
-            _applicationService.ApplyToJob(newId, SessionManager.CurrentUserId, jobId);
-
-            Console.WriteLine("Aplikimi u ruajt.");
-        }
-
-        private void ShowMyApplications()
-        {
-            var apps = _applicationService.GetAllApplications();
-            bool found = false;
-
-            foreach (var app in apps)
-            {
-                if (app.StudentId == SessionManager.CurrentUserId)
-                {
-                    Console.WriteLine($"App {app.Id} - Job {app.JobId} - {app.Status}");
-                    found = true;
-                }
-            }
-
-            if (!found)
-            {
-                Console.WriteLine("Nuk ke aplikime.");
-            }
-        }
-
         private void SearchJobs()
         {
-            Console.Write("Keyword: ");
-            string keyword = Console.ReadLine()!;
+            Console.Write("Shkruaj fjalën kyçe: ");
+            string keyword = Console.ReadLine() ?? "";
 
-            var results = _jobService.SearchJobs(keyword);
+            var jobs = _jobService.SearchJobs(keyword);
+            ShowJobs(jobs);
+        }
 
-            if (results.Count == 0)
+        private void FilterByLocation()
+        {
+            Console.Write("Shkruaj lokacionin: ");
+            string location = Console.ReadLine() ?? "";
+
+            var jobs = _jobService.FilterJobsByLocation(location);
+            ShowJobs(jobs);
+        }
+
+        private void FilterByCategory()
+        {
+            Console.Write("Shkruaj kategorinë: ");
+            string category = Console.ReadLine() ?? "";
+
+            var jobs = _jobService.FilterJobsByCategory(category);
+            ShowJobs(jobs);
+        }
+
+        private void ApplyToJob()
+        {
+            Console.Write("Shkruaj Student ID: ");
+            if (!int.TryParse(Console.ReadLine(), out int studentId))
             {
-                Console.WriteLine("Asnjë punë nuk u gjet.");
+                Console.WriteLine("Ju lutem shkruani një numër valid.");
                 return;
             }
 
-            foreach (var job in results)
+            Console.Write("Shkruaj Job ID: ");
+            if (!int.TryParse(Console.ReadLine(), out int jobId))
             {
-                Console.WriteLine($"{job.Id} - {job.Title} - {job.Location}");
-            }
-        }
-
-        private void FilterJobs()
-        {
-            Console.WriteLine("1. Lokacion");
-            Console.WriteLine("2. Kategori");
-
-            string? choice = Console.ReadLine();
-
-            if (choice == "1")
-            {
-                Console.Write("Lokacion: ");
-                string loc = Console.ReadLine()!;
-                var jobs = _jobService.FilterJobsByLocation(loc);
-
-                if (jobs.Count == 0)
-                {
-                    Console.WriteLine("Nuk u gjet asnjë punë.");
-                    return;
-                }
-
-                foreach (var j in jobs)
-                    Console.WriteLine($"{j.Id} - {j.Title}");
-            }
-            else if (choice == "2")
-            {
-                Console.Write("Kategori: ");
-                string cat = Console.ReadLine()!;
-                var jobs = _jobService.FilterJobsByCategory(cat);
-
-                if (jobs.Count == 0)
-                {
-                    Console.WriteLine("Nuk u gjet asnjë punë.");
-                    return;
-                }
-
-                foreach (var j in jobs)
-                    Console.WriteLine($"{j.Id} - {j.Title}");
-            }
-        }
-
-        private void CreateProfile()
-        {
-            Console.Write("Drejtimi: ");
-            string major = Console.ReadLine()!;
-
-            Console.Write("Skills: ");
-            string skills = Console.ReadLine()!;
-
-            Console.Write("Orari i lirë / availability: ");
-            string availability = Console.ReadLine()!;
-
-            _profileService.UpdateProfile(SessionManager.CurrentUserId, major, skills, availability);
-
-            Console.WriteLine("Profili u ruajt.");
-        }
-
-        private void ViewProfile()
-        {
-            var user = _profileService.GetProfile(SessionManager.CurrentUserId);
-
-            if (user == null)
-            {
-                Console.WriteLine("S’ka profil.");
+                Console.WriteLine("Ju lutem shkruani një numër valid.");
                 return;
             }
 
-            Console.WriteLine($"Drejtimi: {user.Major}");
-            Console.WriteLine($"Skills: {user.Skills}");
-            Console.WriteLine($"Availability: {user.Availability}");
+            bool success = _applicationService.ApplyToJob(studentId, jobId, out string message);
+            Console.WriteLine(message);
         }
 
         private void ShowRecommendedJobs()
         {
-            var user = _profileService.GetProfile(SessionManager.CurrentUserId);
+            Console.Write("Shkruaj major: ");
+            string major = Console.ReadLine() ?? "";
 
-            if (user == null)
+            Console.Write("Shkruaj skills (ndarë me presje): ");
+            string skills = Console.ReadLine() ?? "";
+
+            Console.Write("Shkruaj availability: ");
+            string availability = Console.ReadLine() ?? "";
+
+            var jobs = _jobService.GetRecommendedJobs(major, skills, availability);
+            ShowJobs(jobs);
+        }
+
+        private void UpdateProfile()
+        {
+            if (_authService == null)
             {
-                Console.WriteLine("Krijo profilin.");
+                Console.WriteLine("AuthService nuk është i disponueshëm.");
                 return;
             }
 
-            var jobs = _jobService.GetRecommendedJobs(user.Major, user.Skills);
-
-            if (jobs.Count == 0)
+            Console.Write("Shkruaj User ID: ");
+            if (!int.TryParse(Console.ReadLine(), out int userId))
             {
-                Console.WriteLine("Nuk ka rekomandime.");
+                Console.WriteLine("Ju lutem shkruani një numër valid.");
                 return;
             }
 
-            foreach (var j in jobs)
-            {
-                Console.WriteLine($"{j.Id} - {j.Title}");
-            }
+            Console.Write("Shkruaj major: ");
+            string major = Console.ReadLine() ?? "";
+
+            Console.Write("Shkruaj skills: ");
+            string skills = Console.ReadLine() ?? "";
+
+            Console.Write("Shkruaj location: ");
+            string location = Console.ReadLine() ?? "";
+
+            Console.Write("Shkruaj availability: ");
+            string availability = Console.ReadLine() ?? "";
+
+            _authService.UpdateProfile(userId, major, skills, location, availability);
+            Console.WriteLine("Profili u përditësua me sukses.");
         }
     }
 }
