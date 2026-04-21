@@ -34,7 +34,7 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (applicationId <= 0)
+                if (ValidationHelper.IsInvalidId(applicationId))
                     return null;
 
                 return _applicationRepository.GetById(applicationId);
@@ -50,7 +50,7 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (studentId <= 0 || jobId <= 0)
+                if (ValidationHelper.IsInvalidId(studentId) || ValidationHelper.IsInvalidId(jobId))
                     return false;
 
                 return GetAllApplications()
@@ -67,13 +67,13 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (studentId <= 0)
+                if (ValidationHelper.IsInvalidId(studentId))
                 {
                     message = "Student ID nuk është valid.";
                     return false;
                 }
 
-                if (jobId <= 0)
+                if (ValidationHelper.IsInvalidId(jobId))
                 {
                     message = "Job ID nuk është valid.";
                     return false;
@@ -116,13 +116,13 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (applicationId <= 0)
+                if (ValidationHelper.IsInvalidId(applicationId))
                 {
                     Logger.Log("Application ID nuk është valid.");
                     return;
                 }
 
-                if (string.IsNullOrWhiteSpace(newStatus))
+                if (ValidationHelper.IsNullOrWhiteSpace(newStatus))
                 {
                     Logger.Log("Statusi nuk mund të jetë bosh.");
                     return;
@@ -161,7 +161,7 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (studentId <= 0)
+                if (ValidationHelper.IsInvalidId(studentId))
                     return new List<Application>();
 
                 return GetAllApplications()
@@ -179,7 +179,7 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (jobId <= 0)
+                if (ValidationHelper.IsInvalidId(jobId))
                     return new List<Application>();
 
                 return GetAllApplications()
@@ -197,7 +197,7 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (applicationId <= 0)
+                if (ValidationHelper.IsInvalidId(applicationId))
                 {
                     Logger.Log("Application ID nuk është valid.");
                     return;
