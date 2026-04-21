@@ -101,6 +101,22 @@ Të gjitha testet janë ekzekutuar me sukses (Passed).
 - Validime më të avancuara (email unik, etj.)
 - UI më i avancuar
 
+## Përmirësimet në Improvement Sprint
+
+Në këtë fazë të projektit janë realizuar përmirësimet e mëposhtme:
+
+- Refaktorim i validimeve të përsëritura në service layer për kod më të pastër
+- Përmirësim i validation dhe error handling për raste si:
+  - ID jo valide
+  - job që nuk ekziston
+  - aplikim i dyfishtë
+- Shtim i testeve për raste kufitare dhe inpute jo valide
+- Përmirësim i dokumentimit me:
+  - project-audit.md
+  - improvement-report.md
+
+Këto përmirësime e bëjnë sistemin më të qëndrueshëm, më të mirëmbajtshëm dhe më profesional.
+
 ---
 
 ## Autori
