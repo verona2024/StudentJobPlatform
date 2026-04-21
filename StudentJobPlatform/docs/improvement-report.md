@@ -1,51 +1,70 @@
 # Improvement Report — StudentJobPlatform
 
-## Përmirësimet e realizuara
+## Përmbledhje
 
-### 1. Refaktorim i validimeve
+Në këtë sprint janë realizuar 3 përmirësime reale në projektin StudentJobPlatform. Qëllimi nuk ka qenë shtimi i feature-ve të reja, por përmirësimi i strukturës së kodit, reliability dhe dokumentimit të projektit ekzistues.
 
-- Problemi: kontrolli për ID dhe inpute ishte i përsëritur në shumë vende
-- Çfarë ndryshova: krijova klasën `ValidationHelper` dhe e përdora në metoda kryesore
-- Pse është më mirë: redukton duplikimin dhe e bën kodin më të pastër
+## 1. Përmirësimi në kod / strukturë
 
----
+### Çka ishte më parë problem
+Në `ApplicationService`, validimet bazike si kontrolli për ID jo valide përsëriteshin në disa metoda. Kjo e bënte kodin më pak të pastër dhe më të vështirë për mirëmbajtje.
 
-### 2. Përmirësim i validation dhe error handling
+### Çfarë ndryshova
+U krijua klasa `ValidationHelper` me metoda të thjeshta për validim, si:
+- `IsInvalidId(int id)`
+- `IsNullOrWhiteSpace(string? value)`
 
-- Problemi: disa raste si ID jo valide, job që nuk ekziston ose input bosh nuk trajtoheshin në mënyrë të plotë
-- Çfarë ndryshova:
-  - shtova validim për studentId dhe jobId
-  - shtova kontroll për job që nuk ekziston
-  - përmirësova mesazhet e gabimeve
-- Pse është më mirë:
-  - sistemi është më i qëndrueshëm
-  - përdoruesi merr feedback të qartë
+Këto metoda u përdorën në pjesët kryesore të `ApplicationService`.
 
----
+### Pse versioni i ri është më i mirë
+Kodi tani është më i lexueshëm, ka më pak përsëritje dhe është më i lehtë për mirëmbajtje.
 
-### 3. Shtim i testeve
+## 2. Përmirësimi në reliability / error handling / validation
 
-- Problemi: testet nuk mbulonin të gjitha rastet
-- Çfarë ndryshova:
-  - shtova teste për:
-    - studentId jo valid
-    - jobId jo valid
-    - job që nuk ekziston
-- Pse është më mirë:
-  - rrit besueshmërinë e sistemit
-  - kap gabimet më herët
+### Çka ishte më parë problem
+Disa raste si student ID jo valid, job ID jo valid, job që nuk ekziston dhe aplikimi i dyfishtë nuk trajtoheshin aq qartë sa duhej.
 
----
+### Çfarë ndryshova
+U përmirësua `ApplicationService` për të trajtuar këto raste:
+- student ID jo valid
+- job ID jo valid
+- job që nuk ekziston
+- aplikim i dyfishtë
+- status bosh ose jo valid në `UpdateApplicationStatus`
 
-## Çka mbetet ende e dobët
+Po ashtu u përdorën mesazhe më të qarta për rastet e gabimeve.
 
-- Nuk ka databazë reale (përdoret JSON/CSV)
-- Nuk ka validim të avancuar për të gjitha inputet
-- Nuk ka autentikim dhe siguri të avancuar
+### Pse versioni i ri është më i mirë
+Sistemi tani është më i qëndrueshëm, më i parashikueshëm dhe më i sigurt ndaj inputeve problematike.
 
----
+## 3. Përmirësimi në dokumentim dhe testim
 
-## Reflektim
+### Çka ishte më parë problem
+Dokumentimi fillestar nuk e shpjegonte mjaftueshëm improvement sprint, ndërsa testet nuk mbulonin disa edge cases të rëndësishme.
 
-Ky proces më ndihmoi të kuptoj më mirë rëndësinë e validimit, testimit dhe organizimit të kodit. 
-Gjithashtu kuptova që përmirësimet e vogla por të menduara mirë kanë ndikim të madh në cilësinë e sistemit.
+### Çfarë ndryshova
+U përditësuan dhe u shtuan:
+- `README.md`
+- `docs/project-audit.md`
+- `docs/improvement-report.md`
+
+Po ashtu u shtuan teste të reja në `ApplicationServiceTests` për:
+- student ID jo valid
+- job ID jo valid
+- job që nuk ekziston
+- kontrollin `HasUserAppliedToJob`
+
+### Pse versioni i ri është më i mirë
+Projekti është më i kuptueshëm për vlerësim dhe më i besueshëm për shkak të mbulimit më të mirë me teste.
+
+## Çka mbetet ende e dobët në projekt
+
+Edhe pas këtyre përmirësimeve, disa dobësi ende mbeten:
+- Projekti ende përdor JSON/CSV dhe jo databazë reale
+- Testet mund të zgjerohen më tej me më shumë edge cases
+- Siguria bazike mund të përmirësohet
+- Disa pjesë të UI flow mund të rafinohen më tej
+
+## Përfundim
+
+Ky improvement sprint më ndihmoi të analizoj projektin jo vetëm si implementim funksional, por edhe si cilësi inxhinierike. Përmirësimet e bëra janë të fokusuara në mirëmbajtje, reliability dhe dokumentim, dhe e bëjnë versionin aktual të projektit më të fortë se më parë.

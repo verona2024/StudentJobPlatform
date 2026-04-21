@@ -2,106 +2,93 @@
 
 ## Përshkrimi
 
-StudentJobPlatform është një aplikacion web i ndërtuar me ASP.NET Core që mundëson lidhjen ndërmjet studentëve dhe punëdhënësve. Platforma lejon studentët të kërkojnë dhe aplikojnë për punë, ndërsa employer-at mund të publikojnë dhe menaxhojnë ofertat e punës.
+StudentJobPlatform është një aplikacion web i ndërtuar me ASP.NET Core që lidh studentët me punëdhënësit. Studentët mund të kërkojnë dhe aplikojnë për punë, ndërsa employer-at mund të publikojnë dhe menaxhojnë oferta pune.
 
-Ky projekt është zhvilluar duke ndjekur parimet e arkitekturës së pastër dhe clean code.
-
----
+Ky projekt është zhvilluar duke ndjekur ndarjen e qartë të përgjegjësive dhe parimet bazë të clean code.
 
 ## Funksionalitetet Kryesore
 
-### 👨‍🎓 Student
+### Student
 - Shikon listën e job-eve
 - Kërkon dhe filtron job-et sipas fjalëve kyçe
 - Aplikon për job
 - Shikon aplikimet e veta
-- Menaxhon profilin (major, skills, availability)
-- Merr rekomandime të job-eve
+- Menaxhon profilin
 
-### 🧑‍💼 Employer
+### Employer
 - Shton job-e të reja
 - Editon dhe fshin job-et ekzistuese
 - Shikon aplikimet për job-et e veta
-- Ndryshon statusin e aplikimeve (Accepted / Rejected)
+- Ndryshon statusin e aplikimeve
 
-### 👑 Admin
-- Shikon të gjithë përdoruesit
+### Admin
+- Shikon përdoruesit
 - Shikon job-et dhe aplikimet në sistem
 
----
-
-## Validation
+## Arkitektura e Projektit
 
 Projekti ndjek një strukturë të qartë me ndarje të përgjegjësive:
 
 UI → Service → Repository
 
-- **UI (Web Layer)** – ndërfaqja e përdoruesit (ASP.NET Core)
+- **UI (Web Layer)** – ndërfaqja e përdoruesit në ASP.NET Core
 - **Service Layer** – përmban logjikën e biznesit
-- **Repository Layer** – menaxhon të dhënat (CRUD operations)
+- **Repository Layer** – menaxhon ruajtjen dhe marrjen e të dhënave
 
-Kjo ndarje e bën projektin më të mirëmbajtshëm dhe të zgjerueshëm.
-
----
+Kjo ndarje e bën projektin më të mirëmbajtshëm dhe më të lehtë për testim.
 
 ## Teknologjitë e Përdorura
 
 - ASP.NET Core
 - C#
 - Repository Pattern
-- MSTest (Unit Testing)
+- MSTest
 - JSON/CSV për ruajtjen e të dhënave
-
----
 
 ## Testimi
 
-Projekti përmban unit tests për funksionalitetet kryesore:
+Projekti përmban unit tests për funksionalitetet kryesore, si:
+- aplikimi në job
+- aplikimi i dyfishtë
+- validimi për student ID jo valid
+- validimi për job ID jo valid
+- trajtimi i rastit kur job nuk ekziston
 
-- Shtimi i job-eve
-- Filtrimi dhe kërkimi i job-eve
-- Sortimi i job-eve sipas pagës
-- Aplikimi në job
-- Kontrolli për aplikim të dyfishtë
+## Error Handling dhe Validation
 
-Të gjitha testet janë ekzekutuar me sukses (Passed).
-
----
-
-## Error Handling
-
-- Përdoren `try-catch` në Service dhe Repository
-- Validim i inputeve për të parandaluar gabime
-- Mesazhe të qarta për përdoruesin
-- Sistemi nuk crashon gjatë ekzekutimit
-
----
+- Përdoren `try-catch` në service layer
+- Janë shtuar kontrolle për ID jo valide
+- Sistemi kontrollon nëse job ekziston para aplikimit
+- Parandalohet aplikimi i dyfishtë
+- Përdoren mesazhe të qarta për raste gabimi
 
 ## Logging
 
 - Është implementuar `Logger`
 - Gabimet ruhen në file (`logs.txt`)
-- Ndihmon në debug dhe mirëmbajtje
+- Logging ndihmon në debug dhe mirëmbajtje
 
----
+## Përmirësimet në Improvement Sprint
+
+Në këtë sprint janë realizuar këto përmirësime:
+- refaktorim i validimeve të përsëritura me `ValidationHelper`
+- përmirësim i validation dhe error handling në `ApplicationService`
+- shtim i testeve për raste kufitare
+- përmirësim i dokumentimit me `project-audit.md` dhe `improvement-report.md`
 
 ## Si të Ekzekutohet Projekti
 
-1. Hap projektin në Visual Studio
+1. Hap `StudentJobPlatform.sln` në Visual Studio
 2. Vendos `StudentJobPlatform.Web` si startup project
-3. Kliko Run (F5)
+3. Kliko Run (`F5`)
 4. Aplikacioni hapet në browser
 
----
+## Përmirësime të Mundshme në të Ardhmen
 
-## Përmirësime të Mundshme
-
-- Migrimi nga CSV në databazë reale (p.sh. PostgreSQL)
-- Implementimi i hashing për password
-- Validime më të avancuara (email unik, etj.)
-- UI më i avancuar
-
----
+- Migrimi nga ruajtja aktuale në databazë reale (p.sh. PostgreSQL)
+- Validime më të avancuara
+- Siguri më e fortë për të dhënat e përdoruesit
+- Zgjerim i testimit me më shumë edge cases
 
 ## Autori
 

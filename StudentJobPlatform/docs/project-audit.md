@@ -2,64 +2,61 @@
 
 ## 1. Përshkrimi i shkurtër i projektit
 
-StudentJobPlatform është një aplikacion që lidh studentët me punëdhënësit. 
-Studentët mund të kërkojnë dhe aplikojnë për punë, ndërsa employer-at mund të publikojnë dhe menaxhojnë oferta pune.
+StudentJobPlatform është një aplikacion web i ndërtuar me ASP.NET Core që lidh studentët me punëdhënësit. Sistemi u mundëson studentëve të shohin oferta pune, të filtrojnë dhe të aplikojnë për to, ndërsa employer-at mund të krijojnë, përditësojnë dhe fshijnë oferta pune dhe të menaxhojnë aplikimet.
 
-Përdoruesit kryesorë janë:
+Përdoruesit kryesorë të sistemit janë:
 - Student
 - Employer
 - Admin
 
-Funksionaliteti kryesor është menaxhimi i job-eve dhe aplikimeve.
-
----
+Funksionaliteti kryesor i sistemit është:
+- menaxhimi i job-eve
+- aplikimi në job
+- kontrolli i aplikimeve
+- organizimi i logjikës në shtresa të ndara
 
 ## 2. Çka funksionon mirë?
 
-- Ndarja e projektit në shtresa (UI → Service → Repository) është e qartë dhe e organizuar mirë
-- Funksionalitetet bazë si aplikimi në job dhe menaxhimi i job-eve funksionojnë saktë
-- Testet mbulojnë skenarë të rëndësishëm si aplikimi i dyfishtë dhe validimi i inputeve
-
----
+1. Projekti ka ndarje të qartë në shtresa: Web/UI, Service dhe Repository.
+2. Funksionalitetet bazë si aplikimi në job, menaxhimi i job-eve dhe kontrolli i roleve funksionojnë.
+3. Ekzistojnë unit tests për disa raste të rëndësishme.
+4. Projekti ka dokumentim bazik dhe strukturë të lexueshme.
+5. Ka përdorim të logging dhe trajtim bazik të gabimeve.
 
 ## 3. Dobësitë e projektit
 
-- Ka përsëritje të validimeve (p.sh. kontrolli për ID <= 0 në shumë vende)
-- Error handling nuk është i standardizuar në të gjitha metodat
-- Nuk ka validim të avancuar për inpute (p.sh. email unik, data)
-- Struktura e disa metodave mund të thjeshtohet për lexueshmëri më të mirë
-- Dokumentimi fillestar ishte i kufizuar dhe jo shumë i detajuar
+1. Validimi i inputeve nuk ishte i centralizuar dhe përsëritej në disa metoda.
+2. Error handling ekzistonte, por nuk ishte i unifikuar në të gjitha rastet.
+3. Testet fillestare mbulonin vetëm disa raste bazike dhe jo mjaftueshëm edge cases.
+4. Dokumentimi fillestar nuk e shpjegonte mjaftueshëm improvement sprint dhe ndryshimet e bëra.
+5. Projekti përdor JSON/CSV në vend të databazës reale, gjë që e kufizon shkallëzimin.
+6. Siguria bazike mund të përmirësohet më tej, sidomos te validimi dhe ruajtja e të dhënave.
+7. Disa pjesë të kodit mund të bëhen më të pastra për mirëmbajtje afatgjatë.
 
----
-
-## 4. 3 përmirësime që do t’i implementosh
+## 4. 3 përmirësime që do t’i implementoj
 
 ### Përmirësimi 1 — Refaktorim i validimeve
+- **Problemi:** Në `ApplicationService` kontrolli për ID jo valide përsëritej në disa metoda.
+- **Zgjidhja:** U krijua `ValidationHelper` për të centralizuar validimet bazike.
+- **Pse ka rëndësi:** E bën kodin më të pastër, më të lexueshëm dhe më të mirëmbajtshëm.
 
-- Problemi: validimet janë të përsëritura në shumë vende
-- Zgjidhja: krijimi i një klase `ValidationHelper`
-- Pse ka rëndësi: e bën kodin më të pastër dhe më të mirëmbajtshëm
+### Përmirësimi 2 — Përmirësim i reliability / validation / error handling
+- **Problemi:** Sistemi nuk trajtonte në mënyrë mjaftueshëm të qartë disa raste si job që nuk ekziston ose input jo valid.
+- **Zgjidhja:** U përmirësua `ApplicationService` për të kontrolluar:
+  - student ID jo valid
+  - job ID jo valid
+  - job që nuk ekziston
+  - aplikim të dyfishtë
+  - status jo valid në përditësimin e aplikimit
+- **Pse ka rëndësi:** Sistemi bëhet më i qëndrueshëm dhe jep feedback më të qartë për përdoruesin.
 
----
+### Përmirësimi 3 — Përmirësim i dokumentimit dhe testimit
+- **Problemi:** Dokumentimi nuk ishte i plotë dhe testet nuk mbulonin mjaftueshëm raste kufitare.
+- **Zgjidhja:** U përditësua `README.md`, u shtuan `project-audit.md` dhe `improvement-report.md`, dhe u shtuan teste të reja për raste jo valide.
+- **Pse ka rëndësi:** E bën projektin më të kuptueshëm, më profesional dhe më të besueshëm.
 
-### Përmirësimi 2 — Përmirësim i validation dhe error handling
+## 5. Një pjesë që ende nuk e kuptoj plotësisht
 
-- Problemi: mungon trajtimi i disa rasteve si ID jo valide ose job që nuk ekziston
-- Zgjidhja: shtimi i kontrolleve dhe mesazheve të qarta për gabime
-- Pse ka rëndësi: rrit stabilitetin dhe përvojën e përdoruesit
+Një pjesë që ende dua ta kuptoj më mirë është organizimi i një sistemi më të avancuar me databazë reale, sidomos si menaxhohen migrimet, ruajtja e të dhënave dhe autorizimi në një aplikacion më të madh.
 
----
-
-### Përmirësimi 3 — Dokumentim më i mirë
-
-- Problemi: dokumentimi nuk ishte i plotë
-- Zgjidhja: përmirësimi i README dhe shtimi i dokumenteve në folderin docs
-- Pse ka rëndësi: ndihmon në kuptimin dhe mirëmbajtjen e projektit
-
----
-
-## 5. Një pjesë që ende nuk e kupton plotësisht
-
-Një pjesë që ende nuk e kuptoj plotësisht është organizimi optimal i shtresave dhe si mund të përmirësohet më tej ndarja e përgjegjësive në një projekt më të madh.
-
-Gjithashtu, dua të kuptoj më mirë praktikat më të avancuara për error handling dhe strukturimin e aplikacioneve në nivel enterprise.
+Gjithashtu dua të kuptoj më thellë si të organizohet testimi përtej unit tests, për shembull me integration tests për flow-t kryesore.
