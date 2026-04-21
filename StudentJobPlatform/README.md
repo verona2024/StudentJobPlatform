@@ -1,4 +1,4 @@
-﻿# StudentJobPlatform
+# StudentJobPlatform
 
 ## Përshkrimi
 
@@ -30,7 +30,7 @@ Ky projekt është zhvilluar duke ndjekur parimet e arkitekturës së pastër dh
 
 ---
 
-## Arkitektura e Projektit
+## Validation
 
 Projekti ndjek një strukturë të qartë me ndarje të përgjegjësive:
 
