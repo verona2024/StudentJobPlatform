@@ -27,7 +27,7 @@ Ky projekt synon të zgjidhë këtë problem duke ofruar një platformë ku:
 
 Flow-i kryesor që do të demonstroj është:
 
-👉 Shfaqja e job-eve → aplikimi në job → validimi → rezultati
+Shfaqja e job-eve → aplikimi në job → validimi → rezultati
 
 Ky flow u zgjodh sepse:
 - është funksionaliteti kryesor i sistemit
