@@ -1,0 +1,7 @@
+[2026-05-01 21:58:18] ERROR: Email ekziston.
+STACK TRACE:    at StudentJobPlatform.Services.AuthService.Register(String name, String email, String password, String role) in C:\Users\Admin\source\repos\StudentJobPlatform\StudentJobPlatform\Services\AuthService.cs:line 56
+
+[2026-05-01 21:58:18] ERROR: Email ekziston.
+STACK TRACE:    at StudentJobPlatform.Services.AuthService.Register(String name, String email, String password, String role) in C:\Users\Admin\source\repos\StudentJobPlatform\StudentJobPlatform\Services\AuthService.cs:line 56
+   at StudentJobPlatform.Web.Controllers.AuthController.Register(String name, String email, String password, String role) in C:\Users\Admin\source\repos\StudentJobPlatform\StudentJobPlatform.Web\Controllers\AuthController.cs:line 95
+

@@ -32,9 +32,7 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (id <= 0)
-                    return null;
-
+                if (id <= 0) return null;
                 return _jobRepository.GetById(id);
             }
             catch (Exception ex)
@@ -62,8 +60,7 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (job == null || !IsValidJob(job))
-                    return false;
+                if (job == null || !IsValidJob(job)) return false;
 
                 _jobRepository.Add(job);
                 _jobRepository.Save();
@@ -80,13 +77,10 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (job == null || !IsValidJob(job))
-                    return false;
+                if (job == null || !IsValidJob(job)) return false;
 
                 var existingJob = _jobRepository.GetById(job.Id);
-
-                if (existingJob == null)
-                    return false;
+                if (existingJob == null) return false;
 
                 _jobRepository.Update(job);
                 _jobRepository.Save();
@@ -103,13 +97,10 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (id <= 0)
-                    return false;
+                if (id <= 0) return false;
 
                 var existingJob = _jobRepository.GetById(id);
-
-                if (existingJob == null)
-                    return false;
+                if (existingJob == null) return false;
 
                 _jobRepository.Delete(id);
                 _jobRepository.Save();
@@ -126,8 +117,7 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                if (employerId <= 0)
-                    return new List<Job>();
+                if (employerId <= 0) return new List<Job>();
 
                 return GetAllJobs()
                     .Where(j => j.EmployerId == employerId)
@@ -148,14 +138,25 @@ namespace StudentJobPlatform.Services
                     return GetAllJobs();
 
                 keyword = keyword.Trim().ToLower();
+                var jobs = GetAllJobs();
 
-                return GetAllJobs()
-                    .Where(j =>
-                        (!string.IsNullOrWhiteSpace(j.Title) && j.Title.ToLower().Contains(keyword)) ||
-                        (!string.IsNullOrWhiteSpace(j.Company) && j.Company.ToLower().Contains(keyword)) ||
-                        (!string.IsNullOrWhiteSpace(j.Description) && j.Description.ToLower().Contains(keyword)) ||
-                        (!string.IsNullOrWhiteSpace(j.Category) && j.Category.ToLower().Contains(keyword)) ||
-                        (!string.IsNullOrWhiteSpace(j.Location) && j.Location.ToLower().Contains(keyword)))
+                if (keyword.Length < 3)
+                {
+                    return jobs.Where(j =>
+                        ExactWordMatch(j.Title, keyword) ||
+                        ExactWordMatch(j.Company, keyword) ||
+                        ExactWordMatch(j.Description, keyword) ||
+                        ExactWordMatch(j.Category, keyword) ||
+                        ExactWordMatch(j.Location, keyword))
+                        .ToList();
+                }
+
+                return jobs.Where(j =>
+                    ContainsWord(j.Title, keyword) ||
+                    ContainsWord(j.Company, keyword) ||
+                    ContainsWord(j.Description, keyword) ||
+                    ContainsWord(j.Category, keyword) ||
+                    ContainsWord(j.Location, keyword))
                     .ToList();
             }
             catch (Exception ex)
@@ -163,6 +164,32 @@ namespace StudentJobPlatform.Services
                 Logger.Log(ex);
                 return new List<Job>();
             }
+        }
+
+        private bool ContainsWord(string? text, string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            var words = text
+                .ToLower()
+                .Split(new[] { ' ', '/', '-', ',', '.', ':', ';', '(', ')', '[', ']' },
+                    StringSplitOptions.RemoveEmptyEntries);
+
+            return words.Any(w => w.Contains(keyword));
+        }
+
+        private bool ExactWordMatch(string? text, string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            var words = text
+                .ToLower()
+                .Split(new[] { ' ', '/', '-', ',', '.', ':', ';', '(', ')', '[', ']' },
+                    StringSplitOptions.RemoveEmptyEntries);
+
+            return words.Contains(keyword);
         }
 
         public List<Job> GetRecommendedJobs(string major, string skills, string availability)
@@ -174,27 +201,28 @@ namespace StudentJobPlatform.Services
                 if (string.IsNullOrWhiteSpace(major) &&
                     string.IsNullOrWhiteSpace(skills) &&
                     string.IsNullOrWhiteSpace(availability))
-                {
                     return jobs;
-                }
 
                 string majorLower = (major ?? "").Trim().ToLower();
                 string skillsLower = (skills ?? "").Trim().ToLower();
                 string availabilityLower = (availability ?? "").Trim().ToLower();
 
                 return jobs.Where(j =>
-                        (!string.IsNullOrWhiteSpace(j.Description) && (
-                            (!string.IsNullOrWhiteSpace(majorLower) && j.Description.ToLower().Contains(majorLower)) ||
-                            (!string.IsNullOrWhiteSpace(skillsLower) && j.Description.ToLower().Contains(skillsLower)) ||
-                            (!string.IsNullOrWhiteSpace(availabilityLower) && j.Description.ToLower().Contains(availabilityLower))
-                        )) ||
-                        (!string.IsNullOrWhiteSpace(j.Title) && (
-                            (!string.IsNullOrWhiteSpace(majorLower) && j.Title.ToLower().Contains(majorLower)) ||
-                            (!string.IsNullOrWhiteSpace(skillsLower) && j.Title.ToLower().Contains(skillsLower))
-                        )) ||
-                        (!string.IsNullOrWhiteSpace(j.Category) && (
-                            (!string.IsNullOrWhiteSpace(availabilityLower) && j.Category.ToLower().Contains(availabilityLower))
-                        )))
+                    (!string.IsNullOrWhiteSpace(j.Description) &&
+                    (
+                        (!string.IsNullOrWhiteSpace(majorLower) && j.Description.ToLower().Contains(majorLower)) ||
+                        (!string.IsNullOrWhiteSpace(skillsLower) && j.Description.ToLower().Contains(skillsLower)) ||
+                        (!string.IsNullOrWhiteSpace(availabilityLower) && j.Description.ToLower().Contains(availabilityLower))
+                    )) ||
+                    (!string.IsNullOrWhiteSpace(j.Title) &&
+                    (
+                        (!string.IsNullOrWhiteSpace(majorLower) && j.Title.ToLower().Contains(majorLower)) ||
+                        (!string.IsNullOrWhiteSpace(skillsLower) && j.Title.ToLower().Contains(skillsLower))
+                    )) ||
+                    (!string.IsNullOrWhiteSpace(j.Category) &&
+                    (
+                        (!string.IsNullOrWhiteSpace(availabilityLower) && j.Category.ToLower().Contains(availabilityLower))
+                    )))
                     .ToList();
             }
             catch (Exception ex)
@@ -208,9 +236,7 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                return GetAllJobs()
-                    .OrderBy(j => j.Title)
-                    .ToList();
+                return GetAllJobs().OrderBy(j => j.Title).ToList();
             }
             catch (Exception ex)
             {
@@ -223,9 +249,7 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                return GetAllJobs()
-                    .OrderBy(j => j.Salary)
-                    .ToList();
+                return GetAllJobs().OrderBy(j => j.Salary).ToList();
             }
             catch (Exception ex)
             {
@@ -238,9 +262,7 @@ namespace StudentJobPlatform.Services
         {
             try
             {
-                return GetAllJobs()
-                    .OrderByDescending(j => j.Salary)
-                    .ToList();
+                return GetAllJobs().OrderByDescending(j => j.Salary).ToList();
             }
             catch (Exception ex)
             {
@@ -269,9 +291,8 @@ namespace StudentJobPlatform.Services
                 location = location.Trim().ToLower();
 
                 return GetAllJobs()
-                    .Where(j =>
-                        !string.IsNullOrWhiteSpace(j.Location) &&
-                        j.Location.ToLower().Contains(location))
+                    .Where(j => !string.IsNullOrWhiteSpace(j.Location) &&
+                                j.Location.ToLower().Contains(location))
                     .ToList();
             }
             catch (Exception ex)
@@ -291,9 +312,8 @@ namespace StudentJobPlatform.Services
                 category = category.Trim().ToLower();
 
                 return GetAllJobs()
-                    .Where(j =>
-                        !string.IsNullOrWhiteSpace(j.Category) &&
-                        j.Category.ToLower().Contains(category))
+                    .Where(j => !string.IsNullOrWhiteSpace(j.Category) &&
+                                j.Category.ToLower().Contains(category))
                     .ToList();
             }
             catch (Exception ex)
@@ -305,29 +325,14 @@ namespace StudentJobPlatform.Services
 
         private bool IsValidJob(Job job)
         {
-            if (string.IsNullOrWhiteSpace(job.Title))
-                return false;
-
-            if (string.IsNullOrWhiteSpace(job.Company))
-                return false;
-
-            if (string.IsNullOrWhiteSpace(job.Description))
-                return false;
-
-            if (string.IsNullOrWhiteSpace(job.Category))
-                return false;
-
-            if (string.IsNullOrWhiteSpace(job.Location))
-                return false;
-
-            if (string.IsNullOrWhiteSpace(job.WorkingHours))
-                return false;
-
-            if (job.Salary <= 0)
-                return false;
-
-            if (job.EmployerId <= 0)
-                return false;
+            if (string.IsNullOrWhiteSpace(job.Title)) return false;
+            if (string.IsNullOrWhiteSpace(job.Company)) return false;
+            if (string.IsNullOrWhiteSpace(job.Description)) return false;
+            if (string.IsNullOrWhiteSpace(job.Category)) return false;
+            if (string.IsNullOrWhiteSpace(job.Location)) return false;
+            if (string.IsNullOrWhiteSpace(job.WorkingHours)) return false;
+            if (job.Salary <= 0) return false;
+            if (job.EmployerId <= 0) return false;
 
             return true;
         }

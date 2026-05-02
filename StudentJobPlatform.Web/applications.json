@@ -46,6 +46,13 @@
     "StudentId": 3,
     "JobId": 12,
     "ApplicationDate": "2026-04-21T21:22:16.8355843+02:00",
+    "Status": "Accepted"
+  },
+  {
+    "Id": 8,
+    "StudentId": 2,
+    "JobId": 5,
+    "ApplicationDate": "2026-05-02T19:31:04.6053856+02:00",
     "Status": "Pending"
   }
 ]

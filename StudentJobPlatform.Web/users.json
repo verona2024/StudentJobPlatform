@@ -1,9 +1,9 @@
 [
   {
     "Id": 1,
-    "Name": "Vera Ademaj",
+    "Name": "Verona Ademaj",
     "Email": "verona.ademaj@umib.net",
-    "Password": "jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=",
+    "Password": "FeKw08M4keuw8e9gnsQZQgwg4yDOlMZfvIwzEkSOsiU=",
     "Role": "Employer",
     "Major": "",
     "Skills": "",
@@ -12,24 +12,13 @@
   },
   {
     "Id": 2,
-    "Name": "Fjolla",
-    "Email": "fjolla@gmail.com",
-    "Password": "FeKw08M4keuw8e9gnsQZQgwg4yDOlMZfvIwzEkSOsiU=",
-    "Role": "Student",
-    "Major": "",
-    "Skills": "",
-    "Location": "",
-    "Availability": ""
-  },
-  {
-    "Id": 3,
-    "Name": "Verona Ademaj",
+    "Name": "Verona",
     "Email": "veronaademaj17@gmail.com",
     "Password": "FeKw08M4keuw8e9gnsQZQgwg4yDOlMZfvIwzEkSOsiU=",
     "Role": "Student",
-    "Major": "",
-    "Skills": "",
-    "Location": "",
-    "Availability": ""
+    "Major": "Software Engineer",
+    "Skills": "C3, ASP.NET Core, SQL",
+    "Location": "Pej\u00EB",
+    "Availability": "Fullt-Time"
   }
 ]
